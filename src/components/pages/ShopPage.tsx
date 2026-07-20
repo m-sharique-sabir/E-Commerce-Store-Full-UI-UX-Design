@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SlidersHorizontal, X, Grid3X3, LayoutList } from 'lucide-react';
 import { useRouterStore } from '@/stores';
@@ -309,6 +309,11 @@ export function ShopPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [currentPage, setCurrentPage] = useState(1);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
+  // Sync category filter with URL params (for SPA navigation)
+  useEffect(() => {
+    setSelectedCategories(params.category ? [params.category] : []);
+  }, [params.category]);
 
   // Search query from router params
   const searchQuery = params.q?.toLowerCase() || '';

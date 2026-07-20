@@ -22,41 +22,74 @@ Designed with the visual language of Apple, Stripe, and Nike — every pixel cra
 ### Home
 ![Home](public/screenshots/01-home.png)
 
-### Shop
-![Shop](public/screenshots/02-shop.png)
+### Shop — All Products
+![Shop All](public/screenshots/02-shop-all.png)
+
+### Shop — Electronics
+![Shop Electronics](public/screenshots/03-shop-electronics.png)
+
+### Shop — Clothing
+![Shop Clothing](public/screenshots/04-shop-clothing.png)
 
 ### Categories
-![Categories](public/screenshots/03-categories.png)
-
-### About Developer
-![About Developer](public/screenshots/04-about-developer.png)
-
-### Contact
-![Contact](public/screenshots/05-contact.png)
-
-### FAQ
-![FAQ](public/screenshots/06-faq.png)
+![Categories](public/screenshots/05-categories.png)
 
 ### Product Detail
-![Product Detail](public/screenshots/07-product-detail.png)
+![Product Detail](public/screenshots/06-product-detail.png)
+
+### Product Detail — Nike Air Max
+![Product Detail 2](public/screenshots/07-product-detail-2.png)
+
+### Search Results
+![Search Results](public/screenshots/08-search-results.png)
+
+### About Developer
+![About Developer](public/screenshots/09-about-developer.png)
+
+### Contact
+![Contact](public/screenshots/10-contact.png)
+
+### FAQ
+![FAQ](public/screenshots/11-faq.png)
+
+### 404 Not Found
+![404](public/screenshots/12-404.png)
 
 ### Login
-![Login](public/screenshots/08-login.png)
+![Login](public/screenshots/13-login.png)
 
 ### Register
-![Register](public/screenshots/09-register.png)
+![Register](public/screenshots/14-register.png)
 
-### Cart
-![Cart](public/screenshots/10-cart.png)
+### Forgot Password
+![Forgot Password](public/screenshots/15-forgot-password.png)
+
+### Cart (12 items)
+![Cart](public/screenshots/16-cart.png)
 
 ### Checkout
-![Checkout](public/screenshots/11-checkout.png)
+![Checkout](public/screenshots/17-checkout.png)
+
+### Order Success
+![Order Success](public/screenshots/18-order-success.png)
 
 ### Dashboard
-![Dashboard](public/screenshots/12-dashboard.png)
+![Dashboard](public/screenshots/19-dashboard.png)
 
-### Wishlist
-![Wishlist](public/screenshots/13-wishlist.png)
+### Profile
+![Profile](public/screenshots/20-profile.png)
+
+### Orders
+![Orders](public/screenshots/21-orders.png)
+
+### Order Details
+![Order Details](public/screenshots/22-order-details.png)
+
+### Notifications
+![Notifications](public/screenshots/23-notifications.png)
+
+### Wishlist (10 items)
+![Wishlist](public/screenshots/24-wishlist.png)
 
 ---
 
@@ -124,7 +157,7 @@ Navigation and overlays use `backdrop-filter: blur(20px) saturate(180%)` with se
 ### UI/UX Excellence
 - **Dark Mode** — Full dark mode with one-click toggle
 - **Responsive Design** — Optimized for mobile, tablet, desktop, and ultrawide
-- **13+ Unique Pages** — Each page designed as a standalone premium experience
+- **24 Unique Pages** — Each page designed as a standalone premium experience
 - **Loading States** — Skeleton loaders and smooth transitions
 - **Toast Notifications** — Non-intrusive feedback for every action
 

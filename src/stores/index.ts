@@ -26,7 +26,10 @@ export const useRouterStore = create<RouterStore>((set, get) => ({
     });
     if (typeof window !== 'undefined') {
       const hash = params.id ? `#/${page}/${params.id}` : `#/${page}`;
-      window.location.hash = hash;
+      const queryParts = Object.entries(params)
+        .filter(([k]) => k !== 'id')
+        .map(([k, v]) => `${k}=${encodeURIComponent(v)}`);
+      window.location.hash = queryParts.length > 0 ? `${hash}?${queryParts.join('&')}` : hash;
       window.scrollTo(0, 0);
     }
   },

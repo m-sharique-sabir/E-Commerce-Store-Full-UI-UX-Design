@@ -32,18 +32,19 @@ function AppInitializer({ children }: { children: React.ReactNode }) {
     if (!ready) return;
 
     const parseHash = () => {
-      const hash = window.location.hash.slice(2); // remove '#/'
-      if (!hash || hash === '/') {
+      const raw = window.location.hash.slice(2); // remove '#/'
+      if (!raw || raw === '/') {
         useRouterStore.getState().navigate('home');
         return;
       }
-      const parts = hash.split('/');
+      // Split query params first
+      const [pathPart, queryPart] = raw.split('?');
+      const parts = pathPart.split('/');
       const page = parts[0] as any;
       const params: Record<string, string> = {};
       if (parts[1]) params.id = parts[1];
-      // Also parse query params if present
-      if (hash.includes('?')) {
-        const queryPart = hash.split('?')[1];
+      // Parse query params
+      if (queryPart) {
         queryPart.split('&').forEach((pair) => {
           const [key, value] = pair.split('=');
           if (key && value) params[key] = decodeURIComponent(value);

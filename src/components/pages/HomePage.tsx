@@ -38,24 +38,47 @@ export function HomePage() {
   return (
     <div className="min-h-screen">
       {/* ──────────────── Hero Section ──────────────── */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-500 to-fuchsia-500" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.15),transparent_60%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(255,255,255,0.1),transparent_60%)]" />
+      <section className="relative overflow-hidden mesh-gradient noise-overlay">
+        {/* Animated orbs */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <motion.div
+            animate={{ x: [0, 30, 0], y: [0, -20, 0] }}
+            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute top-20 left-[10%] h-72 w-72 rounded-full bg-indigo-500/20 blur-[100px]"
+          />
+          <motion.div
+            animate={{ x: [0, -25, 0], y: [0, 25, 0] }}
+            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+            className="absolute top-40 right-[15%] h-96 w-96 rounded-full bg-blue-500/15 blur-[120px]"
+          />
+          <motion.div
+            animate={{ x: [0, 20, 0], y: [0, -15, 0] }}
+            transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+            className="absolute bottom-20 left-[40%] h-64 w-64 rounded-full bg-indigo-400/10 blur-[80px]"
+          />
+          {/* Grid pattern overlay */}
+          <div
+            className="absolute inset-0 opacity-[0.03]"
+            style={{
+              backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+              backgroundSize: '60px 60px',
+            }}
+          />
+        </div>
 
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
-          className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8 lg:py-36 text-center"
+          className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8 lg:py-32 text-center"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="inline-flex items-center gap-2 rounded-full bg-white/20 backdrop-blur-sm px-4 py-1.5 mb-6 text-sm font-medium text-white"
+            className="inline-flex items-center gap-2 rounded-full glass px-5 py-2 mb-8 text-sm font-medium text-white/90"
           >
-            <Sparkles className="h-4 w-4" />
+            <Sparkles className="h-4 w-4 text-amber-300" />
             New Collection 2025
           </motion.div>
 
@@ -63,10 +86,13 @@ export function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-4xl sm:text-5xl lg:text-7xl font-bold text-white tracking-tight leading-tight"
+            className="text-4xl sm:text-5xl lg:text-7xl font-bold text-white tracking-[-0.03em] leading-[1.05]"
           >
-            Discover Premium
+            Discover
             <br />
+            <span className="bg-gradient-to-r from-indigo-200 via-blue-200 to-indigo-100 bg-clip-text text-transparent">
+              Premium
+            </span>{' '}
             Products
           </motion.h1>
 
@@ -74,7 +100,7 @@ export function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.45 }}
-            className="mx-auto mt-6 max-w-2xl text-lg sm:text-xl text-white/85 leading-relaxed"
+            className="mx-auto mt-6 max-w-xl text-lg sm:text-xl text-white/60 leading-relaxed font-light"
           >
             Curated collection of exceptional items from the world&apos;s finest
             brands
@@ -84,24 +110,47 @@ export function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
+            className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <Button
               size="lg"
               onClick={() => navigate('shop')}
-              className="rounded-xl bg-white text-violet-600 hover:bg-white/90 font-semibold px-6 sm:px-8 h-12 text-base shadow-lg shadow-violet-700/30"
+              className="rounded-2xl bg-white text-gray-900 hover:bg-white/90 font-semibold px-8 sm:px-10 h-12 sm:h-14 text-base shadow-2xl shadow-white/10 btn-shine"
             >
               Shop Now
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Button>
             <Button
               size="lg"
               variant="outline"
               onClick={() => navigate('categories')}
-              className="rounded-xl border-2 border-white text-white bg-transparent hover:bg-white hover:text-violet-600 font-semibold px-6 sm:px-8 h-12 text-base transition-all duration-300"
+              className="rounded-2xl border border-white/20 text-white bg-white/5 hover:bg-white/10 font-semibold px-8 sm:px-10 h-12 sm:h-14 text-base transition-all duration-300 backdrop-blur-sm"
             >
               Explore Categories
             </Button>
+          </motion.div>
+
+          {/* Trust indicators */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.8 }}
+            className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-10 text-white/40 text-sm"
+          >
+            <div className="flex items-center gap-2">
+              <Truck className="h-4 w-4" />
+              <span>Free Shipping</span>
+            </div>
+            <div className="w-1 h-1 rounded-full bg-white/20" />
+            <div className="flex items-center gap-2">
+              <Shield className="h-4 w-4" />
+              <span>Secure Payment</span>
+            </div>
+            <div className="w-1 h-1 rounded-full bg-white/20 hidden sm:block" />
+            <div className="hidden sm:flex items-center gap-2">
+              <RotateCcw className="h-4 w-4" />
+              <span>30-Day Returns</span>
+            </div>
           </motion.div>
         </motion.div>
       </section>
@@ -125,7 +174,7 @@ export function HomePage() {
           initial="initial"
           whileInView="animate"
           viewport={{ once: true, margin: '-50px' }}
-          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6"
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 lg:gap-6"
         >
           {categories.slice(0, 8).map((category) => (
             <motion.div
@@ -134,7 +183,7 @@ export function HomePage() {
               onClick={() => navigate('shop', { category: category.slug })}
               className="group cursor-pointer rounded-2xl overflow-hidden bg-card border border-border/50 hover:border-border hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
             >
-              <div className="relative aspect-[4/3] overflow-hidden">
+              <div className="relative aspect-square sm:aspect-[4/3] overflow-hidden">
                 <ProductImage
                   src={category.image}
                   alt={category.name}
@@ -183,7 +232,7 @@ export function HomePage() {
         </div>
 
         {featuredProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
             {featuredProducts.map((product, index) => (
               <ProductCard
                 key={product.id}
@@ -225,7 +274,7 @@ export function HomePage() {
         </div>
 
         {bestSellerProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
             {bestSellerProducts.map((product, index) => (
               <ProductCard
                 key={product.id}
@@ -246,7 +295,7 @@ export function HomePage() {
         {...fadeInUp}
         className="relative overflow-hidden"
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-900 to-slate-800" />
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-950 to-gray-900" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.15),transparent_70%)]" />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 lg:py-24 text-center">
@@ -311,7 +360,7 @@ export function HomePage() {
         </div>
 
         {newArrivalProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
             {newArrivalProducts.map((product, index) => (
               <ProductCard
                 key={product.id}
@@ -336,7 +385,7 @@ export function HomePage() {
           transition={{ duration: 0.6 }}
           className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 lg:py-16"
         >
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
             <FeatureItem
               icon={Truck}
               title="Free Shipping"
@@ -377,7 +426,7 @@ function FeatureItem({
 }) {
   return (
     <div className="flex flex-col items-center text-center gap-2 sm:gap-3">
-      <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 text-violet-500 shrink-0">
+      <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500/10 to-blue-500/10 text-indigo-500 shrink-0">
         <Icon className="h-6 w-6 sm:h-7 sm:w-7" />
       </div>
       <div>

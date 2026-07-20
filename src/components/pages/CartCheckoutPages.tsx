@@ -181,7 +181,7 @@ export function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Breadcrumb */}
         <Breadcrumb className="mb-6">
           <BreadcrumbList>
@@ -206,7 +206,7 @@ export function CartPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
       {/* Breadcrumb */}
       <Breadcrumb className="mb-6">
         <BreadcrumbList>
@@ -222,7 +222,7 @@ export function CartPage() {
 
       <h1 className="text-2xl md:text-3xl font-bold mb-8">Shopping Cart</h1>
 
-      <div className="flex flex-col lg:flex-row gap-8">
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
         {/* Cart Items */}
         <div className="flex-1 space-y-4">
           <AnimatePresence mode="popLayout">
@@ -262,7 +262,7 @@ export function CartPage() {
                             <div className="min-w-0">
                               <p className="text-xs text-muted-foreground mb-0.5">{product.brand}</p>
                               <h3
-                                className="font-medium text-sm md:text-base leading-snug line-clamp-2 cursor-pointer hover:text-violet-500 transition-colors"
+                                className="font-medium text-sm md:text-base leading-snug line-clamp-2 cursor-pointer hover:text-indigo-500 transition-colors"
                                 onClick={() => navigate('product', { id: product.id })}
                               >
                                 {product.name}
@@ -333,7 +333,7 @@ export function CartPage() {
         </div>
 
         {/* Sidebar - Order Summary */}
-        <div className="lg:w-[380px] shrink-0 space-y-4">
+        <div className="lg:w-[360px] xl:w-[380px] shrink-0 space-y-4">
           <OrderSummaryCard
             subtotal={subtotal}
             shipping={shipping}
@@ -345,7 +345,7 @@ export function CartPage() {
 
           <Button
             onClick={() => navigate('checkout')}
-            className="w-full h-12 rounded-xl text-base font-semibold bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600 shadow-lg shadow-violet-500/25 transition-all"
+            className="w-full h-12 rounded-xl text-base font-semibold bg-gradient-to-r from-indigo-500 to-blue-600 text-white hover:from-indigo-600 hover:to-blue-700 shadow-lg shadow-indigo-500/25 transition-all"
             size="lg"
           >
             Proceed to Checkout
@@ -379,7 +379,7 @@ export function CheckoutPage() {
   // Auth guard
   if (!isAuthenticated) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <Breadcrumb className="mb-6">
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -406,7 +406,7 @@ export function CheckoutPage() {
           </p>
           <Button
             onClick={() => navigate('login')}
-            className="rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600"
+            className="rounded-xl bg-gradient-to-r from-indigo-500 to-blue-600 text-white hover:from-indigo-600 hover:to-blue-700"
           >
             Sign In
           </Button>
@@ -525,7 +525,7 @@ export function CheckoutPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
       {/* Breadcrumb */}
       <Breadcrumb className="mb-6">
         <BreadcrumbList>
@@ -545,13 +545,13 @@ export function CheckoutPage() {
 
       <h1 className="text-2xl md:text-3xl font-bold mb-8">Checkout</h1>
 
-      <div className="flex flex-col lg:flex-row gap-8">
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
         {/* Left Column - Shipping & Payment */}
         <div className="flex-1 space-y-8">
           {/* Shipping Address Section */}
           <section>
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <Truck className="h-5 w-5 text-violet-500" />
+              <Truck className="h-5 w-5 text-indigo-500" />
               Shipping Address
             </h2>
 
@@ -567,7 +567,7 @@ export function CheckoutPage() {
                     <Card
                       className={`cursor-pointer transition-all border-2 ${
                         selectedAddressId === address.id
-                          ? 'border-violet-500 shadow-md shadow-violet-500/10'
+                          ? 'border-indigo-500 shadow-md shadow-indigo-500/10'
                           : 'border-border/50 hover:border-border'
                       }`}
                       onClick={() => setSelectedAddressId(address.id)}
@@ -578,7 +578,7 @@ export function CheckoutPage() {
                             <div className="flex items-center gap-2 mb-1">
                               <span className="text-sm font-medium">{address.label || 'Address'}</span>
                               {address.isDefault && (
-                                <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-violet-100 text-violet-600 dark:bg-violet-900/30 dark:text-violet-400 font-medium">
+                                <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400 font-medium">
                                   Default
                                 </span>
                               )}
@@ -710,7 +710,7 @@ export function CheckoutPage() {
                     </div>
 
                     {/* City / State / Zip */}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                       <div className="col-span-2 sm:col-span-1 space-y-1.5">
                         <Label htmlFor="addr-city">City *</Label>
                         <Input
@@ -757,7 +757,7 @@ export function CheckoutPage() {
 
                     <Button
                       onClick={handleSaveNewAddress}
-                      className="rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600"
+                      className="rounded-xl bg-gradient-to-r from-indigo-500 to-blue-600 text-white hover:from-indigo-600 hover:to-blue-700"
                       disabled={!isAddressComplete(newAddress)}
                     >
                       Save Address
@@ -771,7 +771,7 @@ export function CheckoutPage() {
           {/* Payment Method Section */}
           <section>
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <CreditCard className="h-5 w-5 text-violet-500" />
+              <CreditCard className="h-5 w-5 text-indigo-500" />
               Payment Method
             </h2>
 
@@ -783,7 +783,7 @@ export function CheckoutPage() {
               {/* Credit Card */}
               <Card className={`border-2 transition-all cursor-pointer ${
                 paymentMethod === 'credit-card'
-                  ? 'border-violet-500 shadow-md shadow-violet-500/10'
+                  ? 'border-indigo-500 shadow-md shadow-indigo-500/10'
                   : 'border-border/50 hover:border-border'
               }`} onClick={() => setPaymentMethod('credit-card')}>
                 <CardContent className="p-4 flex items-center gap-3">
@@ -802,7 +802,7 @@ export function CheckoutPage() {
               {/* PayPal */}
               <Card className={`border-2 transition-all cursor-pointer ${
                 paymentMethod === 'paypal'
-                  ? 'border-violet-500 shadow-md shadow-violet-500/10'
+                  ? 'border-indigo-500 shadow-md shadow-indigo-500/10'
                   : 'border-border/50 hover:border-border'
               }`} onClick={() => setPaymentMethod('paypal')}>
                 <CardContent className="p-4 flex items-center gap-3">
@@ -818,7 +818,7 @@ export function CheckoutPage() {
               {/* Bank Transfer */}
               <Card className={`border-2 transition-all cursor-pointer ${
                 paymentMethod === 'bank-transfer'
-                  ? 'border-violet-500 shadow-md shadow-violet-500/10'
+                  ? 'border-indigo-500 shadow-md shadow-indigo-500/10'
                   : 'border-border/50 hover:border-border'
               }`} onClick={() => setPaymentMethod('bank-transfer')}>
                 <CardContent className="p-4 flex items-center gap-3">
@@ -835,7 +835,7 @@ export function CheckoutPage() {
         </div>
 
         {/* Right Column - Order Summary */}
-        <div className="lg:w-[380px] shrink-0 space-y-4">
+        <div className="lg:w-[360px] xl:w-[380px] shrink-0 space-y-4">
           <OrderSummaryCard
             subtotal={subtotal}
             shipping={shipping}
@@ -878,7 +878,7 @@ export function CheckoutPage() {
           <Button
             onClick={handlePlaceOrder}
             disabled={placing || (!showNewAddressForm && !selectedAddressId) || items.length === 0}
-            className="w-full h-14 rounded-xl text-base font-semibold bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600 shadow-lg shadow-violet-500/25 transition-all disabled:opacity-50"
+            className="w-full h-14 rounded-xl text-base font-semibold bg-gradient-to-r from-indigo-500 to-blue-600 text-white hover:from-indigo-600 hover:to-blue-700 shadow-lg shadow-indigo-500/25 transition-all disabled:opacity-50"
             size="lg"
           >
             {placing ? (
@@ -909,7 +909,7 @@ export function OrderSuccessPage() {
   const orderId = params.orderId ?? '';
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
@@ -986,7 +986,7 @@ export function OrderSuccessPage() {
             <Button
               onClick={() => navigate('order-details', { orderId })}
               size="lg"
-              className="rounded-xl min-w-[180px] bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600 shadow-lg shadow-violet-500/25"
+              className="rounded-xl min-w-[180px] bg-gradient-to-r from-indigo-500 to-blue-600 text-white hover:from-indigo-600 hover:to-blue-700 shadow-lg shadow-indigo-500/25"
             >
               View Order
               <ChevronRight className="h-4 w-4 ml-1" />

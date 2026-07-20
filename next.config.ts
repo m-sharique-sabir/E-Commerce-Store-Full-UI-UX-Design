@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "standalone",
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -18,7 +17,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  allowedDevOrigins: ["preview-chat-7b34daef-dad1-4fe0-81c6-64cb6e892775.space-z.ai"],
 };
 
 export default nextConfig;

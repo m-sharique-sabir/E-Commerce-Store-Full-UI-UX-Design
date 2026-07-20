@@ -54,10 +54,10 @@ function LuxeLogo() {
       variants={logoVariants}
       className="flex items-center justify-center gap-2 mb-2"
     >
-      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 shadow-lg shadow-violet-500/25">
+      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 shadow-lg shadow-indigo-500/25">
         <ShoppingBag className="h-5 w-5 text-white" />
       </div>
-      <span className="text-2xl font-bold bg-gradient-to-r from-violet-500 to-fuchsia-500 bg-clip-text text-transparent">
+      <span className="text-2xl font-bold bg-gradient-to-r from-indigo-500 to-blue-600 bg-clip-text text-transparent">
         Luxe
       </span>
     </motion.div>
@@ -108,14 +108,14 @@ export function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4 py-12 bg-gradient-to-br from-slate-50 via-white to-violet-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950">
+    <div className="flex min-h-screen items-center justify-center px-4 py-12 bg-gradient-to-br from-slate-50 via-white to-indigo-50 dark:from-gray-950 dark:via-gray-900 dark:to-indigo-950">
       <motion.div
         variants={cardVariants}
         initial="hidden"
         animate="visible"
-        className="w-full max-w-md"
+        className="w-full max-w-sm sm:max-w-md"
       >
-        <Card className="border-border/50 shadow-xl shadow-violet-500/5">
+        <Card className="border-border/50 shadow-xl shadow-indigo-500/5">
           <CardHeader className="text-center pb-2">
             <LuxeLogo />
             <CardTitle className="text-2xl font-bold mt-4">
@@ -195,7 +195,7 @@ export function LoginPage() {
                 <button
                   type="button"
                   onClick={() => navigate('forgot-password')}
-                  className="text-sm font-medium text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300 transition-colors"
+                  className="text-sm font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors"
                 >
                   Forgot password?
                 </button>
@@ -205,7 +205,7 @@ export function LoginPage() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full h-11 bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-600 hover:to-fuchsia-600 text-white font-semibold shadow-lg shadow-violet-500/25 transition-all duration-200"
+                className="w-full h-11 bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white font-semibold shadow-lg shadow-indigo-500/25 transition-all duration-200"
               >
                 {loading ? (
                   <span className="flex items-center gap-2">
@@ -250,7 +250,7 @@ export function LoginPage() {
               <button
                 type="button"
                 onClick={() => navigate('register')}
-                className="font-semibold text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300 transition-colors"
+                className="font-semibold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors"
               >
                 Sign Up
               </button>
@@ -326,14 +326,14 @@ export function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4 py-12 bg-gradient-to-br from-slate-50 via-white to-violet-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950">
+    <div className="flex min-h-screen items-center justify-center px-4 py-12 bg-gradient-to-br from-slate-50 via-white to-indigo-50 dark:from-gray-950 dark:via-gray-900 dark:to-indigo-950">
       <motion.div
         variants={cardVariants}
         initial="hidden"
         animate="visible"
-        className="w-full max-w-md"
+        className="w-full max-w-sm sm:max-w-md"
       >
-        <Card className="border-border/50 shadow-xl shadow-violet-500/5">
+        <Card className="border-border/50 shadow-xl shadow-indigo-500/5">
           <CardHeader className="text-center pb-2">
             <LuxeLogo />
             <CardTitle className="text-2xl font-bold mt-4">
@@ -448,7 +448,7 @@ export function RegisterPage() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full h-11 bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-600 hover:to-fuchsia-600 text-white font-semibold shadow-lg shadow-violet-500/25 transition-all duration-200"
+                className="w-full h-11 bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white font-semibold shadow-lg shadow-indigo-500/25 transition-all duration-200"
               >
                 {loading ? (
                   <span className="flex items-center gap-2">
@@ -485,7 +485,7 @@ export function RegisterPage() {
               <button
                 type="button"
                 onClick={() => navigate('login')}
-                className="font-semibold text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300 transition-colors"
+                className="font-semibold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors"
               >
                 Sign In
               </button>
@@ -536,14 +536,14 @@ export function ForgotPasswordPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4 py-12 bg-gradient-to-br from-slate-50 via-white to-violet-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950">
+    <div className="flex min-h-screen items-center justify-center px-4 py-12 bg-gradient-to-br from-slate-50 via-white to-indigo-50 dark:from-gray-950 dark:via-gray-900 dark:to-indigo-950">
       <motion.div
         variants={cardVariants}
         initial="hidden"
         animate="visible"
-        className="w-full max-w-md"
+        className="w-full max-w-sm sm:max-w-md"
       >
-        <Card className="border-border/50 shadow-xl shadow-violet-500/5">
+        <Card className="border-border/50 shadow-xl shadow-indigo-500/5">
           <CardHeader className="text-center pb-2">
             {/* Back to login */}
             <motion.div
@@ -624,7 +624,7 @@ export function ForgotPasswordPage() {
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="w-full h-11 bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-600 hover:to-fuchsia-600 text-white font-semibold shadow-lg shadow-violet-500/25 transition-all duration-200"
+                  className="w-full h-11 bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white font-semibold shadow-lg shadow-indigo-500/25 transition-all duration-200"
                 >
                   {loading ? (
                     <span className="flex items-center gap-2">
@@ -674,7 +674,7 @@ export function ForgotPasswordPage() {
                 <Button
                   type="button"
                   onClick={() => navigate('login')}
-                  className="w-full h-11 bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-600 hover:to-fuchsia-600 text-white font-semibold shadow-lg shadow-violet-500/25 transition-all duration-200"
+                  className="w-full h-11 bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white font-semibold shadow-lg shadow-indigo-500/25 transition-all duration-200"
                 >
                   Back to Sign In
                 </Button>

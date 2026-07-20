@@ -61,7 +61,7 @@ function AppInitializer({ children }: { children: React.ReactNode }) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
-          <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center animate-pulse">
+          <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center animate-pulse">
             <svg className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
               <line x1="3" y1="6" x2="21" y2="6" />
@@ -113,7 +113,9 @@ export default function Home() {
       <div className="min-h-screen flex flex-col">
         <Navbar />
         <main className="flex-1">
-          <PageRouter />
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
+            <PageRouter />
+          </div>
         </main>
         <Footer />
       </div>

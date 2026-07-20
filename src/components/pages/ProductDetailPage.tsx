@@ -265,7 +265,7 @@ export function ProductDetailPage() {
                     aria-label={`View image ${idx + 1} of ${product.name}`}
                     className={`relative flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden border-2 transition-all duration-200 ${
                       selectedImage === idx
-                        ? 'border-violet-500 ring-2 ring-violet-500/20'
+                        ? 'border-indigo-500 ring-2 ring-indigo-500/20'
                         : 'border-border/50 hover:border-border'
                     }`}
                   >
@@ -275,7 +275,7 @@ export function ProductDetailPage() {
                       className="w-full h-full"
                     />
                     {selectedImage === idx && (
-                      <div className="absolute inset-0 bg-violet-500/10" />
+                      <div className="absolute inset-0 bg-indigo-500/10" />
                     )}
                   </button>
                 ))}
@@ -291,7 +291,7 @@ export function ProductDetailPage() {
             className="flex flex-col"
           >
             {/* Brand */}
-            <span className="text-sm text-violet-500 font-medium mb-1">{product.brand}</span>
+            <span className="text-sm text-indigo-500 font-medium mb-1">{product.brand}</span>
 
             {/* Name */}
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-3">
@@ -371,7 +371,7 @@ export function ProductDetailPage() {
                 onClick={handleAddToCart}
                 disabled={product.stock === 0}
                 size="lg"
-                className="flex-1 h-12 text-base font-semibold rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600 shadow-lg shadow-violet-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-violet-500/30 disabled:opacity-50"
+                className="flex-1 h-12 text-base font-semibold rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500 text-white hover:from-indigo-600 hover:to-blue-600 shadow-lg shadow-indigo-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-indigo-500/30 disabled:opacity-50"
               >
                 <ShoppingBag className="h-5 w-5 mr-2" />
                 Add to Cart
@@ -381,7 +381,7 @@ export function ProductDetailPage() {
                 disabled={product.stock === 0}
                 size="lg"
                 variant="outline"
-                className="flex-1 h-12 text-base font-semibold rounded-xl border-2 hover:bg-violet-50 hover:border-violet-300 dark:hover:bg-violet-950/30 dark:hover:border-violet-700 transition-all disabled:opacity-50"
+                className="flex-1 h-12 text-base font-semibold rounded-xl border-2 hover:bg-indigo-50 hover:border-indigo-300 dark:hover:bg-indigo-950/30 dark:hover:border-indigo-700 transition-all disabled:opacity-50"
               >
                 Buy Now
               </Button>
@@ -416,17 +416,17 @@ export function ProductDetailPage() {
             {/* Features Bar */}
             <div className="grid grid-cols-3 gap-2 sm:gap-3">
               <div className="flex flex-col items-center gap-1.5 sm:gap-2 p-2.5 sm:p-4 rounded-xl bg-muted/50 border border-border/50 text-center">
-                <Truck className="h-4 w-4 sm:h-5 sm:w-5 text-violet-500" />
+                <Truck className="h-4 w-4 sm:h-5 sm:w-5 text-indigo-500" />
                 <span className="text-[10px] sm:text-xs font-medium">Free Shipping</span>
                 <span className="text-[9px] sm:text-[10px] text-muted-foreground">Orders $100+</span>
               </div>
               <div className="flex flex-col items-center gap-1.5 sm:gap-2 p-2.5 sm:p-4 rounded-xl bg-muted/50 border border-border/50 text-center">
-                <Shield className="h-4 w-4 sm:h-5 sm:w-5 text-violet-500" />
+                <Shield className="h-4 w-4 sm:h-5 sm:w-5 text-indigo-500" />
                 <span className="text-[10px] sm:text-xs font-medium">2-Year Warranty</span>
                 <span className="text-[9px] sm:text-[10px] text-muted-foreground">Full coverage</span>
               </div>
               <div className="flex flex-col items-center gap-1.5 sm:gap-2 p-2.5 sm:p-4 rounded-xl bg-muted/50 border border-border/50 text-center">
-                <RotateCcw className="h-4 w-4 sm:h-5 sm:w-5 text-violet-500" />
+                <RotateCcw className="h-4 w-4 sm:h-5 sm:w-5 text-indigo-500" />
                 <span className="text-[10px] sm:text-xs font-medium">Free Returns</span>
                 <span className="text-[9px] sm:text-[10px] text-muted-foreground">30-day policy</span>
               </div>
@@ -512,7 +512,7 @@ export function ProductDetailPage() {
                           <div className="flex items-start justify-between mb-2">
                             <div>
                               <div className="flex items-center gap-2 mb-1">
-                                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-violet-200 to-fuchsia-200 flex items-center justify-center text-xs font-semibold text-violet-700">
+                                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-indigo-200 to-blue-200 flex items-center justify-center text-xs font-semibold text-indigo-700">
                                   {review.userName.charAt(0).toUpperCase()}
                                 </div>
                                 <span className="font-medium text-sm">{review.userName}</span>
@@ -603,7 +603,7 @@ export function ProductDetailPage() {
                     {/* Submit Button */}
                     <Button
                       onClick={handleSubmitReview}
-                      className="rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600 shadow-lg shadow-violet-500/25"
+                      className="rounded-xl bg-gradient-to-r from-indigo-500 to-blue-500 text-white hover:from-indigo-600 hover:to-blue-600 shadow-lg shadow-indigo-500/25"
                     >
                       Submit Review
                     </Button>
@@ -642,7 +642,7 @@ export function ProductDetailPage() {
                 variant="ghost"
                 size="sm"
                 onClick={() => navigate('shop')}
-                className="text-violet-500 hover:text-violet-600 gap-1"
+                className="text-indigo-500 hover:text-indigo-600 gap-1"
               >
                 View All
                 <ChevronRight className="h-4 w-4" />

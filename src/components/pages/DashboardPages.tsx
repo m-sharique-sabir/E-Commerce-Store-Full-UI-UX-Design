@@ -82,7 +82,7 @@ function timeAgo(dateStr: string): string {
 const statusConfig: Record<Order['status'], { color: string; label: string }> = {
   pending: { color: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400', label: 'Pending' },
   processing: { color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400', label: 'Processing' },
-  shipped: { color: 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400', label: 'Shipped' },
+  shipped: { color: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400', label: 'Shipped' },
   delivered: { color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400', label: 'Delivered' },
   cancelled: { color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400', label: 'Cancelled' },
 };
@@ -144,8 +144,8 @@ export function DashboardPage() {
       label: 'Total Orders',
       value: recentOrders.length,
       icon: Package,
-      color: 'from-violet-500 to-fuchsia-500',
-      shadowColor: 'shadow-violet-500/25',
+      color: 'from-indigo-500 to-blue-600',
+      shadowColor: 'shadow-indigo-500/25',
     },
     {
       label: 'Wishlist Items',
@@ -171,7 +171,7 @@ export function DashboardPage() {
   ];
 
   const quickLinks = [
-    { label: 'Edit Profile', icon: Edit, page: 'profile' as const, color: 'from-violet-500 to-fuchsia-500' },
+    { label: 'Edit Profile', icon: Edit, page: 'profile' as const, color: 'from-indigo-500 to-blue-600' },
     { label: 'View Orders', icon: Package, page: 'orders' as const, color: 'from-blue-500 to-cyan-500' },
     { label: 'Wishlist', icon: Heart, page: 'wishlist' as const, color: 'from-rose-500 to-pink-500' },
     { label: 'Notifications', icon: Bell, page: 'notifications' as const, color: 'from-amber-500 to-orange-500' },
@@ -190,7 +190,7 @@ export function DashboardPage() {
         {/* Welcome */}
         <motion.div variants={fadeIn} initial="hidden" animate="visible" className="mb-8">
           <h1 className="text-2xl font-bold sm:text-3xl">
-            Welcome back, <span className="bg-gradient-to-r from-violet-500 to-fuchsia-500 bg-clip-text text-transparent">{user?.name || 'Guest'}</span> 👋
+            Welcome back, <span className="bg-gradient-to-r from-indigo-500 to-blue-600 bg-clip-text text-transparent">{user?.name || 'Guest'}</span> 👋
           </h1>
           <p className="text-muted-foreground mt-1">Here&apos;s what&apos;s happening with your account today.</p>
         </motion.div>
@@ -200,7 +200,7 @@ export function DashboardPage() {
           variants={staggerContainer}
           initial="hidden"
           animate="visible"
-          className="grid grid-cols-2 gap-4 lg:grid-cols-4 mb-8"
+          className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 mb-8"
         >
           {stats.map((stat) => (
             <motion.div key={stat.label} variants={staggerItem}>
@@ -229,7 +229,7 @@ export function DashboardPage() {
               variant="ghost"
               size="sm"
               onClick={() => navigate('orders')}
-              className="text-violet-600 hover:text-violet-700 dark:text-violet-400"
+              className="text-indigo-600 hover:text-indigo-700 dark:text-indigo-400"
             >
               View All <ChevronRight className="h-4 w-4 ml-1" />
             </Button>
@@ -286,7 +286,7 @@ export function DashboardPage() {
         {/* Quick Links */}
         <motion.div variants={staggerContainer} initial="hidden" animate="visible">
           <h2 className="text-lg font-semibold sm:text-xl mb-4">Quick Links</h2>
-          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
             {quickLinks.map((link) => (
               <motion.div key={link.label} variants={staggerItem}>
                 <Card
@@ -447,7 +447,7 @@ export function ProfilePage() {
           <Card className="border-border/50 overflow-hidden">
             <CardContent className="p-6 sm:p-8">
               <div className="flex items-center gap-4 sm:gap-6">
-                <div className="flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white text-2xl sm:text-3xl font-bold shadow-lg shadow-violet-500/25 shrink-0">
+                <div className="flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-blue-600 text-white text-2xl sm:text-3xl font-bold shadow-lg shadow-indigo-500/25 shrink-0">
                   {initial}
                 </div>
                 <div className="min-w-0">
@@ -498,7 +498,7 @@ export function ProfilePage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
                       <Label htmlFor="profile-name">Full Name</Label>
                       <div className="relative">
@@ -543,7 +543,7 @@ export function ProfilePage() {
                   <div className="mt-6 flex justify-end">
                     <Button
                       onClick={handleSaveProfile}
-                      className="bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-600 hover:to-fuchsia-600 text-white shadow-lg shadow-violet-500/25"
+                      className="bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white shadow-lg shadow-indigo-500/25"
                     >
                       <Check className="h-4 w-4 mr-2" />
                       Save Changes
@@ -587,7 +587,7 @@ export function ProfilePage() {
                       <h3 className="font-semibold mb-4">
                         {editingAddressId ? 'Edit Address' : 'Add New Address'}
                       </h3>
-                      <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
                         <div className="space-y-2">
                           <Label>Label</Label>
                           <Input
@@ -668,7 +668,7 @@ export function ProfilePage() {
                         </Button>
                         <Button
                           onClick={handleSaveAddress}
-                          className="bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-600 hover:to-fuchsia-600 text-white"
+                          className="bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white"
                         >
                           <Check className="h-4 w-4 mr-1" />
                           {editingAddressId ? 'Update' : 'Save'} Address
@@ -773,7 +773,7 @@ export function ProfilePage() {
                         toast.info(darkMode ? 'Light mode enabled' : 'Dark mode enabled');
                       }}
                       className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                        darkMode ? 'bg-violet-500' : 'bg-muted'
+                        darkMode ? 'bg-indigo-500' : 'bg-muted'
                       }`}
                     >
                       <span
@@ -801,7 +801,7 @@ export function ProfilePage() {
                             toast.info(notifOrders ? 'Order notifications disabled' : 'Order notifications enabled');
                           }}
                           className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                            notifOrders ? 'bg-violet-500' : 'bg-muted'
+                            notifOrders ? 'bg-indigo-500' : 'bg-muted'
                           }`}
                         >
                           <span
@@ -822,7 +822,7 @@ export function ProfilePage() {
                             toast.info(notifPromos ? 'Promo notifications disabled' : 'Promo notifications enabled');
                           }}
                           className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                            notifPromos ? 'bg-violet-500' : 'bg-muted'
+                            notifPromos ? 'bg-indigo-500' : 'bg-muted'
                           }`}
                         >
                           <span
@@ -843,7 +843,7 @@ export function ProfilePage() {
                             toast.info(notifSystem ? 'System notifications disabled' : 'System notifications enabled');
                           }}
                           className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                            notifSystem ? 'bg-violet-500' : 'bg-muted'
+                            notifSystem ? 'bg-indigo-500' : 'bg-muted'
                           }`}
                         >
                           <span
@@ -1082,7 +1082,7 @@ export function OrderDetailsPage() {
                           <div
                             className={`flex h-8 w-8 items-center justify-center rounded-full border-2 transition-all shrink-0 ${
                               isCompleted
-                                ? 'bg-gradient-to-br from-violet-500 to-fuchsia-500 border-violet-500 text-white shadow-lg shadow-violet-500/25'
+                                ? 'bg-gradient-to-br from-indigo-500 to-blue-600 border-indigo-500 text-white shadow-lg shadow-indigo-500/25'
                                 : 'bg-background border-muted text-muted-foreground'
                             } ${isCurrent ? 'scale-110' : ''}`}
                           >
@@ -1092,7 +1092,7 @@ export function OrderDetailsPage() {
                             {step.label}
                           </p>
                           {isCurrent && (
-                            <span className="ml-auto text-xs text-violet-500 font-medium">Current</span>
+                            <span className="ml-auto text-xs text-indigo-500 font-medium">Current</span>
                           )}
                         </div>
                       );
@@ -1103,7 +1103,7 @@ export function OrderDetailsPage() {
                     {/* Connecting Line */}
                     <div className="absolute top-5 left-0 right-0 h-0.5 bg-muted mx-10" />
                     <div
-                      className="absolute top-5 left-0 h-0.5 bg-gradient-to-r from-violet-500 to-fuchsia-500 transition-all"
+                      className="absolute top-5 left-0 h-0.5 bg-gradient-to-r from-indigo-500 to-blue-600 transition-all"
                       style={{ width: `${(currentStepIndex / (statusSteps.length - 1)) * 100}%`, marginLeft: '2.5rem' }}
                     />
 
@@ -1115,7 +1115,7 @@ export function OrderDetailsPage() {
                           <div
                             className={`flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all ${
                               isCompleted
-                                ? 'bg-gradient-to-br from-violet-500 to-fuchsia-500 border-violet-500 text-white shadow-lg shadow-violet-500/25'
+                                ? 'bg-gradient-to-br from-indigo-500 to-blue-600 border-indigo-500 text-white shadow-lg shadow-indigo-500/25'
                                 : 'bg-background border-muted text-muted-foreground'
                             } ${isCurrent ? 'scale-110' : ''}`}
                           >
@@ -1305,7 +1305,7 @@ export function NotificationsPage() {
   };
 
   const notificationColors: Record<string, string> = {
-    order: 'from-violet-500 to-fuchsia-500 shadow-violet-500/25',
+    order: 'from-indigo-500 to-blue-600 shadow-indigo-500/25',
     promotion: 'from-amber-500 to-orange-500 shadow-amber-500/25',
     system: 'from-emerald-500 to-teal-500 shadow-emerald-500/25',
     info: 'from-blue-500 to-cyan-500 shadow-blue-500/25',
@@ -1381,7 +1381,7 @@ export function NotificationsPage() {
                               {notif.title}
                             </h3>
                             {!notif.read && (
-                              <span className="h-2 w-2 rounded-full bg-violet-500 shrink-0" />
+                              <span className="h-2 w-2 rounded-full bg-indigo-500 shrink-0" />
                             )}
                           </div>
                           <p className="text-sm text-muted-foreground mt-0.5 line-clamp-2">

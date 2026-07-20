@@ -13,7 +13,7 @@ function ProductImage({ src, alt, className = '' }: { src: string; alt: string; 
   const [loaded, setLoaded] = useState(false);
 
   const gradients = [
-    'from-violet-200 to-fuchsia-200',
+    'from-indigo-200 to-blue-200',
     'from-blue-200 to-cyan-200',
     'from-emerald-200 to-teal-200',
     'from-amber-200 to-orange-200',
@@ -95,82 +95,82 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, delay: index * 0.05 }}
+      transition={{ duration: 0.4, delay: index * 0.06, ease: [0.25, 0.46, 0.45, 0.94] }}
       className="group cursor-pointer"
       onClick={() => navigate('product', { id: product.id })}
     >
-      <div className="relative rounded-2xl overflow-hidden bg-card border border-border/50 hover:border-border hover:shadow-lg transition-all duration-300">
+      <div className="relative rounded-3xl overflow-hidden bg-card border border-border/40 hover:border-border/80 transition-all duration-500 hover-lift shadow-premium">
         {/* Image */}
         <div className="relative aspect-square overflow-hidden bg-muted">
-          <ProductImage src={product.images[0]} alt={product.name} className="w-full h-full" />
+          <ProductImage src={product.images[0]} alt={product.name} className="w-full h-full transition-transform duration-700 ease-out group-hover:scale-110" />
 
-          {/* Overlay Actions */}
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300" />
+          {/* Overlay gradient on hover */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-1.5">
             {product.discount > 0 && (
-              <span className="px-2 py-0.5 rounded-lg bg-destructive text-destructive-foreground text-xs font-semibold">
+              <span className="px-2.5 py-1 rounded-xl bg-red-500/90 backdrop-blur-sm text-white text-xs font-semibold shadow-lg shadow-red-500/20">
                 -{product.discount}%
               </span>
             )}
             {product.isNew && (
-              <span className="px-2 py-0.5 rounded-lg bg-emerald-500 text-white text-xs font-semibold">
+              <span className="px-2.5 py-1 rounded-xl bg-emerald-500/90 backdrop-blur-sm text-white text-xs font-semibold shadow-lg shadow-emerald-500/20">
                 New
               </span>
             )}
             {product.bestSeller && (
-              <span className="px-2 py-0.5 rounded-lg bg-amber-500 text-white text-xs font-semibold">
+              <span className="px-2.5 py-1 rounded-xl bg-amber-500/90 backdrop-blur-sm text-white text-xs font-semibold shadow-lg shadow-amber-500/20">
                 Best Seller
               </span>
             )}
           </div>
 
           {/* Quick Actions - always visible on mobile, hover on desktop */}
-          <div className="absolute top-3 right-3 flex flex-col gap-2 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-300 sm:translate-x-2 sm:group-hover:translate-x-0">
+          <div className="absolute top-3 right-3 flex flex-col gap-2 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-400 sm:translate-x-3 sm:group-hover:translate-x-0">
             <button
               onClick={handleWishlist}
-              className={`h-8 w-8 sm:h-9 sm:w-9 rounded-xl flex items-center justify-center backdrop-blur-sm transition-all ${
+              className={`h-9 w-9 sm:h-10 sm:w-10 rounded-2xl flex items-center justify-center backdrop-blur-md transition-all duration-300 shadow-lg ${
                 inWishlist
-                  ? 'bg-destructive text-destructive-foreground'
-                  : 'bg-background/80 text-foreground hover:bg-background'
+                  ? 'bg-red-500 text-white shadow-red-500/30 scale-110'
+                  : 'bg-white/80 text-gray-800 hover:bg-white hover:scale-110 shadow-black/10'
               }`}
               aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
             >
-              <Heart className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${inWishlist ? 'fill-current' : ''}`} />
+              <Heart className={`h-4 w-4 sm:h-[18px] sm:w-[18px] ${inWishlist ? 'fill-current' : ''}`} />
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); navigate('product', { id: product.id }); }}
-              className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-background/80 text-foreground hover:bg-background flex items-center justify-center backdrop-blur-sm transition-all"
+              className="h-9 w-9 sm:h-10 sm:w-10 rounded-2xl bg-white/80 text-gray-800 hover:bg-white hover:scale-110 flex items-center justify-center backdrop-blur-md transition-all duration-300 shadow-lg shadow-black/10"
               aria-label="Quick view"
             >
-              <Eye className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              <Eye className="h-4 w-4 sm:h-[18px] sm:w-[18px]" />
             </button>
           </div>
 
           {/* Add to Cart - always visible on mobile, hover on desktop */}
-          <div className="absolute bottom-2 left-2 right-2 sm:bottom-3 sm:left-3 sm:right-3 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-300 sm:translate-y-2 sm:group-hover:translate-y-0">
+          <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-400 sm:translate-y-3 sm:group-hover:translate-y-0">
             <Button
               onClick={handleAddToCart}
-              className="w-full rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600 shadow-lg h-9 sm:h-auto text-xs sm:text-sm"
+              className="w-full rounded-2xl bg-gray-900/90 dark:bg-white/90 text-white dark:text-gray-900 hover:bg-gray-900 dark:hover:bg-white backdrop-blur-md font-semibold shadow-xl h-10 sm:h-11 text-sm btn-shine transition-all duration-300"
               size="sm"
             >
-              <ShoppingBag className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5 sm:mr-2" /> Add to Cart
+              <ShoppingBag className="h-4 w-4 mr-2" /> Add to Cart
             </Button>
           </div>
         </div>
 
         {/* Info */}
-        <div className="p-4">
-          <p className="text-xs text-muted-foreground mb-1">{product.brand}</p>
-          <h3 className="font-medium text-sm leading-snug mb-2 line-clamp-2 group-hover:text-violet-500 transition-colors">
+        <div className="p-4 sm:p-5">
+          <p className="text-xs text-muted-foreground mb-1.5 font-medium tracking-wide uppercase">{product.brand}</p>
+          <h3 className="font-semibold text-sm leading-snug mb-2.5 line-clamp-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300">
             {product.name}
           </h3>
           <Rating rating={product.rating} count={product.reviewCount} />
-          <div className="flex items-center gap-2 mt-2">
-            <span className="font-semibold text-lg">${product.price.toLocaleString()}</span>
+          <div className="flex items-baseline gap-2.5 mt-3">
+            <span className="font-bold text-xl tracking-tight">${product.price.toLocaleString()}</span>
             {product.discount > 0 && (
-              <span className="text-sm text-muted-foreground line-through">
+              <span className="text-sm text-muted-foreground line-through decoration-1">
                 ${product.originalPrice.toLocaleString()}
               </span>
             )}

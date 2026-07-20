@@ -68,15 +68,15 @@ export function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full border-b border-border/30 bg-background/70 backdrop-blur-2xl supports-[backdrop-filter]:bg-background/50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between gap-4">
+          <div className="flex h-16 sm:h-[68px] items-center justify-between gap-4">
             {/* Logo */}
-            <button onClick={() => navigate('home')} className="flex items-center gap-2 shrink-0">
-              <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center">
+            <button onClick={() => navigate('home')} className="flex items-center gap-2.5 shrink-0">
+              <div className="h-9 w-9 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 transition-transform duration-300 hover:scale-105">
                 <ShoppingBag className="h-4 w-4 text-white" />
               </div>
-              <span className="text-xl font-bold tracking-tight hidden sm:block">Luxe</span>
+              <span className="text-xl font-bold tracking-[-0.02em] hidden sm:block">Luxe</span>
             </button>
 
             {/* Desktop Nav */}
@@ -85,9 +85,9 @@ export function Navbar() {
                 <button
                   key={link.page}
                   onClick={() => navigate(link.page)}
-                  className={`px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 ${
+                  className={`px-4 py-2 text-sm font-medium rounded-2xl transition-all duration-300 ${
                     page === link.page
-                      ? 'bg-accent text-accent-foreground'
+                      ? 'bg-accent text-accent-foreground shadow-sm'
                       : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
                   }`}
                 >
@@ -203,7 +203,7 @@ export function Navbar() {
               >
                 <Heart className="h-4 w-4 sm:h-5 sm:w-5" />
                 {wishlistItems.length > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full bg-violet-500 text-white text-[10px] font-bold flex items-center justify-center">
+                  <span className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full bg-indigo-500 text-white text-[10px] font-bold flex items-center justify-center">
                     {wishlistItems.length}
                   </span>
                 )}
@@ -219,7 +219,7 @@ export function Navbar() {
               >
                 <ShoppingBag className="h-4 w-4 sm:h-5 sm:w-5" />
                 {totals.itemCount > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full bg-violet-500 text-white text-[10px] font-bold flex items-center justify-center">
+                  <span className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full bg-indigo-500 text-white text-[10px] font-bold flex items-center justify-center">
                     {totals.itemCount}
                   </span>
                 )}
@@ -235,14 +235,14 @@ export function Navbar() {
                     className="rounded-xl h-9 w-9 sm:h-10 sm:w-10"
                     aria-label="User menu"
                   >
-                    <div className="h-7 w-7 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white text-xs font-bold">
+                    <div className="h-7 w-7 rounded-full bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center text-white text-xs font-bold">
                       {user?.name?.charAt(0) || 'U'}
                     </div>
                   </Button>
                 ) : (
                   <Button
                     onClick={() => navigate('login')}
-                    className="rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600"
+                    className="rounded-2xl bg-gradient-to-r from-indigo-500 to-blue-600 text-white hover:from-indigo-600 hover:to-blue-700 btn-shine"
                     size="sm"
                   >
                     Sign In
@@ -321,16 +321,16 @@ export function Navbar() {
                 animate={{ x: 0 }}
                 exit={{ x: '100%' }}
                 transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                className="fixed right-0 top-0 bottom-0 w-[85vw] max-w-sm bg-background border-l border-border z-[9999] p-6 overflow-y-auto shadow-2xl"
+                className="fixed right-0 top-0 bottom-0 w-[85vw] max-w-sm bg-background/95 backdrop-blur-2xl border-l border-border/50 z-[9999] p-6 overflow-y-auto shadow-2xl"
               >
                 <div className="flex items-center justify-between mb-8">
-                  <div className="flex items-center gap-2">
-                    <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center">
+                  <div className="flex items-center gap-2.5">
+                    <div className="h-9 w-9 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
                       <ShoppingBag className="h-4 w-4 text-white" />
                     </div>
-                    <span className="text-lg font-bold">Luxe</span>
+                    <span className="text-lg font-bold tracking-[-0.02em]">Luxe</span>
                   </div>
-                  <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(false)} className="rounded-xl">
+                  <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(false)} className="rounded-2xl">
                     <X className="h-5 w-5" />
                   </Button>
                 </div>
@@ -355,8 +355,8 @@ export function Navbar() {
                     <button
                       key={link.page}
                       onClick={() => { navigate(link.page); setMobileMenuOpen(false); }}
-                      className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
-                        page === link.page ? 'bg-accent text-accent-foreground' : 'hover:bg-accent/50'
+                      className={`w-full text-left px-4 py-3 rounded-2xl text-sm font-medium transition-all duration-300 ${
+                        page === link.page ? 'bg-accent text-accent-foreground shadow-sm' : 'hover:bg-accent/50'
                       }`}
                     >
                       {link.label}

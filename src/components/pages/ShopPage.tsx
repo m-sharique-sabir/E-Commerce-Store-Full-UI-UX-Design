@@ -245,7 +245,7 @@ function ProductListItem({ product, index }: { product: Product; index: number }
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
             <div className="min-w-0">
               <p className="text-xs text-muted-foreground mb-0.5">{product.brand}</p>
-              <h3 className="font-medium text-sm sm:text-base leading-snug line-clamp-2 group-hover:text-violet-500 transition-colors">
+              <h3 className="font-medium text-sm sm:text-base leading-snug line-clamp-2 group-hover:text-indigo-500 transition-colors">
                 {product.name}
               </h3>
               <div className="flex items-center gap-2 mt-1.5">
@@ -501,7 +501,7 @@ export function ShopPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 lg:py-10">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-10">
         {/* ───── Breadcrumb ───── */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -652,13 +652,13 @@ export function ShopPage() {
         </AnimatePresence>
 
         {/* ───── Main Content ───── */}
-        <div className="flex gap-8">
+        <div className="flex gap-6 lg:gap-8">
           {/* Desktop Sidebar */}
           <motion.aside
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: 0.1 }}
-            className="hidden lg:block w-64 shrink-0"
+            className="hidden lg:block w-56 lg:w-64 shrink-0"
           >
             <div className="sticky top-24 rounded-2xl border bg-card p-5">
               <h3 className="font-semibold text-sm flex items-center gap-2 mb-4">

@@ -17,6 +17,14 @@ import {
   Heart,
   HelpCircle,
   Home,
+  Linkedin,
+  Github,
+  Code2,
+  Smartphone,
+  Palette,
+  Zap,
+  Server,
+  ExternalLink,
 } from 'lucide-react';
 import { useRouterStore, useSearchStore } from '@/stores';
 import {
@@ -26,9 +34,7 @@ import {
   clearSearchHistory,
 } from '@/lib/storage';
 import {
-  ProductCard,
   ProductGrid,
-  Rating,
   EmptyState,
   ProductImage,
 } from '@/components/shared';
@@ -40,8 +46,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from '@/components/ui/accordion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
+import { Card, CardContent } from '@/components/ui/card';
 import { Product, Category } from '@/lib/types';
 import { toast } from 'sonner';
 
@@ -74,20 +79,43 @@ export function CategoriesPage() {
     if (typeof window !== 'undefined') return getStoredCategories();
     return [];
   });
-
   return (
-    <div className="min-h-screen pb-12">
-      {/* Header */}
+    <div className="min-h-screen pb-16 sm:pb-24">
+      {/* Hero */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="mb-8"
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        className="relative rounded-3xl overflow-hidden mb-10 sm:mb-14"
       >
-        <h1 className="text-3xl font-bold tracking-tight">Browse Categories</h1>
-        <p className="text-muted-foreground mt-2">
-          Explore our wide range of product categories
-        </p>
+        <div className="mesh-gradient px-5 py-14 sm:px-10 sm:py-20 lg:px-16 lg:py-24 text-center text-white">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/15 border border-indigo-500/25 text-indigo-300 text-xs font-semibold tracking-wide uppercase mb-5 sm:mb-6"
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-pulse" />
+            Explore Collections
+          </motion.div>
+          <motion.h1
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.25 }}
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight"
+          >
+            <span className="gradient-text">Browse</span>{' '}
+            <span>Categories</span>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="mt-4 sm:mt-5 text-base sm:text-lg text-white/60 max-w-xl mx-auto leading-relaxed"
+          >
+            Discover curated collections crafted for every style, need, and ambition.
+          </motion.p>
+        </div>
       </motion.div>
 
       {/* Categories Grid */}
@@ -95,37 +123,43 @@ export function CategoriesPage() {
         variants={staggerContainer}
         initial="initial"
         animate="animate"
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 lg:gap-6"
       >
-        {categories.map((category, index) => (
+        {categories.map((category) => (
           <motion.div
             key={category.id}
             variants={staggerItem}
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.98 }}
-            className="cursor-pointer"
+            className="cursor-pointer group"
             onClick={() => navigate('shop', { category: category.slug })}
           >
-            <div className="rounded-2xl overflow-hidden bg-card border border-border/50 hover:border-border hover:shadow-lg transition-all duration-300">
+            <div className="relative rounded-3xl overflow-hidden bg-card border border-border/40 hover-lift">
               {/* Category Image */}
               <div className="relative aspect-[4/3] overflow-hidden bg-muted">
                 <ProductImage
                   src={category.image}
                   alt={category.name}
-                  className="w-full h-full"
+                  className="w-full h-full transition-transform duration-700 ease-out group-hover:scale-110"
                 />
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 {/* Product Count Badge */}
-                <div className="absolute top-3 right-3 px-2.5 py-1 rounded-xl bg-background/80 backdrop-blur-sm text-xs font-semibold">
+                <div className="absolute top-3 right-3 sm:top-4 sm:right-4 px-3 py-1.5 rounded-2xl bg-background/70 dark:bg-background/60 backdrop-blur-xl text-[11px] font-bold tracking-wide uppercase border border-white/10">
                   {category.productCount} items
+                </div>
+                {/* Hover Arrow */}
+                <div className="absolute bottom-4 right-4 h-10 w-10 rounded-2xl bg-white/20 backdrop-blur-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0 border border-white/20">
+                  <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
                 </div>
               </div>
 
               {/* Category Info */}
-              <div className="p-4">
-                <h3 className="font-semibold text-base mb-1 group-hover:text-violet-500 transition-colors">
+              <div className="p-4 sm:p-5">
+                <h3 className="font-bold text-base sm:text-lg mb-1.5 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors duration-300">
                   {category.name}
                 </h3>
-                <p className="text-sm text-muted-foreground line-clamp-2">
+                <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
                   {category.description}
                 </p>
               </div>
@@ -277,11 +311,11 @@ export function SearchPage() {
               onFocus={() => {
                 if (suggestions.length > 0) setShowSuggestions(true);
               }}
-              className="pl-12 h-14 text-lg rounded-2xl border-border/50 focus-visible:border-violet-400 focus-visible:ring-violet-400/20 shadow-sm"
+              className="pl-12 h-12 sm:h-14 text-lg rounded-2xl border-border/50 focus-visible:border-indigo-400 focus-visible:ring-indigo-400/20 shadow-sm"
             />
             <Button
               onClick={() => handleSearch()}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600"
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-xl bg-gradient-to-r from-indigo-500 to-blue-600 text-white hover:from-indigo-600 hover:to-blue-600"
             >
               Search
             </Button>
@@ -397,186 +431,374 @@ export function SearchPage() {
 export function AboutPage() {
   const navigate = useRouterStore((s) => s.navigate);
 
-  const values = [
-    {
-      icon: Award,
-      title: 'Quality',
-      description:
-        'We handpick every product to ensure it meets the highest standards of quality and craftsmanship.',
-    },
+  const services = [
     {
       icon: Globe,
-      title: 'Innovation',
-      description:
-        'We stay ahead of trends, constantly sourcing the latest and most innovative products from around the world.',
+      title: 'Complete SaaS Websites',
+      description: 'Frontend, backend, database — full-stack SaaS platforms built from scratch.',
+      gradient: 'from-indigo-500 to-blue-600',
     },
     {
-      icon: Heart,
-      title: 'Customer First',
-      description:
-        'Our customers are at the heart of everything we do. We strive to exceed expectations with every interaction.',
+      icon: Code2,
+      title: 'Custom Business Websites',
+      description: 'Professional, scalable web presence tailored to your company\'s needs.',
+      gradient: 'from-blue-500 to-cyan-500',
+    },
+    {
+      icon: Smartphone,
+      title: 'Mobile Apps',
+      description: 'Cross-platform mobile applications for both Android and iOS.',
+      gradient: 'from-indigo-500 to-violet-500',
+    },
+    {
+      icon: Palette,
+      title: 'UI/UX Design',
+      description: 'Modern, user-friendly interfaces that are responsive and beautiful.',
+      gradient: 'from-violet-500 to-purple-500',
+    },
+    {
+      icon: Zap,
+      title: 'API Integration & Real-time',
+      description: 'WebSockets, AI features, third-party APIs — dynamic systems that work.',
+      gradient: 'from-blue-600 to-indigo-500',
+    },
+    {
+      icon: Server,
+      title: 'Database Architecture',
+      description: 'Scalable data models, optimized queries, and reliable infrastructure.',
+      gradient: 'from-cyan-500 to-blue-500',
     },
   ];
 
-  const team = [
-    { name: 'Sarah Chen', role: 'CEO & Founder', color: 'from-violet-400 to-fuchsia-400' },
-    { name: 'James Miller', role: 'Head of Product', color: 'from-emerald-400 to-teal-400' },
-    { name: 'Aisha Patel', role: 'Creative Director', color: 'from-amber-400 to-orange-400' },
+  const whyMe = [
+    'Full Stack ownership — from database design to live deployment',
+    'SaaS architecture experience — multi-tenancy, roles, real-time systems, AI integration',
+    'Production-ready code — not just tutorials or demos',
+    'Independent execution — minimal supervision needed',
+    'Proven track record — real apps, real users, real systems',
   ];
 
   const stats = [
-    { label: 'Products', value: '100+', icon: Award },
-    { label: 'Customers', value: '50K+', icon: Users },
-    { label: 'Satisfaction', value: '99%', icon: Heart },
-    { label: 'Support', value: '24/7', icon: Clock },
+    { label: 'Years Experience', value: '2+', icon: Award },
+    { label: 'Projects Delivered', value: '15+', icon: Globe },
+    { label: 'Technologies', value: '10+', icon: Code2 },
+    { label: 'Client Satisfaction', value: '100%', icon: Heart },
   ];
 
   return (
-    <div className="min-h-screen pb-12">
-      {/* Hero Section */}
+    <div className="min-h-screen pb-16 sm:pb-24">
+      {/* Hero — Developer Profile */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
-        className="relative rounded-3xl overflow-hidden mb-12"
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        className="relative rounded-3xl overflow-hidden mb-10 sm:mb-14"
       >
-        <div className="bg-gradient-to-br from-violet-500 via-fuchsia-500 to-pink-500 px-8 py-16 sm:px-16 sm:py-24 text-center text-white">
-          <motion.h1
-            initial={{ opacity: 0, scale: 0.9 }}
+        <div className="mesh-gradient px-5 py-16 sm:px-10 sm:py-20 lg:px-16 lg:py-24 text-center text-white">
+          <div className="absolute top-10 left-[10%] h-48 w-48 sm:h-64 sm:w-64 rounded-full bg-indigo-500/15 blur-3xl animate-float" />
+          <div className="absolute bottom-10 right-[10%] h-40 w-40 sm:h-56 sm:w-56 rounded-full bg-blue-500/12 blur-3xl animate-float" style={{ animationDelay: '1.5s' }} />
+
+          {/* Profile Image */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4"
+            transition={{ duration: 0.6, delay: 0.15 }}
+            className="relative z-10 mb-6 sm:mb-8"
           >
-            About Luxe
+            <div className="relative inline-block">
+              <div className="h-40 w-40 sm:h-52 sm:w-52 lg:h-64 lg:w-64 rounded-full overflow-hidden border-4 border-white/20 shadow-2xl shadow-indigo-500/30 mx-auto">
+                <img
+                  src="/m-sharique-sabir.webp"
+                  alt="Mohammad Sharique Sabir"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="absolute -bottom-1 -right-1 h-8 w-8 sm:h-9 sm:w-9 rounded-full bg-green-500 border-4 border-[#0c0e1a] flex items-center justify-center">
+                <span className="text-white text-xs font-bold">✓</span>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.25 }}
+            className="relative z-10 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/15 border border-indigo-500/25 text-indigo-300 text-xs font-semibold tracking-wide uppercase mb-5 sm:mb-6"
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-pulse" />
+            Full Stack Developer
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.35 }}
+            className="relative z-10 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight"
+          >
+            <span>Mohammad Sharique</span>
+            <br className="hidden sm:block" />
+            <span className="gradient-text"> Sabir</span>
           </motion.h1>
+
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-lg sm:text-xl text-white/80 max-w-2xl mx-auto"
+            transition={{ duration: 0.5, delay: 0.45 }}
+            className="relative z-10 mt-4 sm:mt-5 text-base sm:text-lg text-white/60 max-w-2xl mx-auto leading-relaxed"
           >
-            Curating the world&apos;s finest products for discerning customers who appreciate quality, style, and innovation.
+            React · Next.js · Laravel Specialist
           </motion.p>
+
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="relative z-10 mt-2 text-sm text-white/40"
+          >
+            📍 Islamabad, Pakistan
+          </motion.p>
+
+          {/* Social Links */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className="relative z-10 mt-6 flex items-center justify-center gap-3"
+          >
+            <a
+              href="https://www.linkedin.com/in/m-sharique-sabir/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="h-10 w-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center transition-all duration-300"
+            >
+              <Linkedin className="h-4 w-4 text-white" />
+            </a>
+            <a
+              href="https://github.com/m-sharique-sabir"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="h-10 w-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center transition-all duration-300"
+            >
+              <Github className="h-4 w-4 text-white" />
+            </a>
+            <a
+              href="mailto:mohammadsharique2409950@gmail.com"
+              className="h-10 w-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center transition-all duration-300"
+            >
+              <Mail className="h-4 w-4 text-white" />
+            </a>
+            <a
+              href="https://wa.me/923392409950"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="h-10 w-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center transition-all duration-300"
+            >
+              <Phone className="h-4 w-4 text-white" />
+            </a>
+          </motion.div>
         </div>
       </motion.div>
 
-      {/* Mission Section */}
+      {/* About Me */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="mb-12"
+        className="mb-10 sm:mb-14"
       >
-        <Card className="rounded-2xl border-border/50 shadow-sm">
-          <CardContent className="p-6 sm:p-8">
-            <div className="flex items-start gap-4">
-              <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center flex-shrink-0">
-                <Globe className="h-6 w-6 text-white" />
+        <div className="relative rounded-3xl overflow-hidden border border-border/40 bg-card">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.03] via-transparent to-blue-500/[0.03]" />
+          <div className="relative p-6 sm:p-10 lg:p-12">
+            <div className="flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-10">
+              <div className="flex-shrink-0">
+                <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-lg shadow-indigo-500/25">
+                  <Code2 className="h-7 w-7 sm:h-8 sm:w-8 text-white" />
+                </div>
               </div>
-              <div>
-                <h2 className="text-2xl font-bold mb-3">Our Mission</h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  At Luxe, we believe everyone deserves access to premium products that enhance their daily lives.
-                  Our mission is to bridge the gap between exceptional craftsmanship and the modern consumer,
-                  making luxury accessible without compromise. We partner with the world&apos;s finest brands and
-                  artisans to bring you a curated collection that reflects quality, innovation, and timeless elegance.
+              <div className="flex-1">
+                <h2 className="text-2xl sm:text-3xl font-bold mb-4">About Me</h2>
+                <p className="text-muted-foreground leading-relaxed text-base sm:text-lg max-w-3xl">
+                  I&apos;m Mohammad Sharique, a Full Stack Developer with 2+ years of hands-on experience
+                  building scalable, production-grade web applications and enterprise SaaS platforms.
+                  I worked at Gigbitesoft.com, where I developed complete SaaS websites — handling
+                  everything from frontend and backend to database architecture and UI/UX design.
+                  I specialize in React 19, Next.js, and Laravel 13, delivering complete systems
+                  from database design to pixel-perfect interfaces. I don&apos;t just build interfaces —
+                  I build complete systems.
                 </p>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  {['React 19', 'Next.js', 'Laravel 13', 'Full Stack', 'SaaS'].map((tag) => (
+                    <span key={tag} className="px-4 py-1.5 rounded-2xl bg-indigo-500/8 border border-indigo-500/15 text-indigo-600 dark:text-indigo-400 text-xs font-semibold tracking-wide uppercase">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </motion.div>
 
-      {/* Values Section */}
+      {/* What I Do — Services */}
       <motion.div
         variants={staggerContainer}
         initial="initial"
         animate="animate"
-        className="mb-12"
+        className="mb-10 sm:mb-14"
       >
-        <motion.h2
-          variants={staggerItem}
-          className="text-2xl font-bold mb-6 text-center"
-        >
-          Our Values
-        </motion.h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-          {values.map((value) => (
-            <motion.div key={value.title} variants={staggerItem}>
-              <Card className="rounded-2xl border-border/50 shadow-sm h-full hover:shadow-md transition-shadow">
-                <CardContent className="p-6 text-center">
-                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-violet-100 to-fuchsia-100 dark:from-violet-950 dark:to-fuchsia-950 flex items-center justify-center mx-auto mb-4">
-                    <value.icon className="h-7 w-7 text-violet-600 dark:text-violet-400" />
-                  </div>
-                  <h3 className="text-lg font-semibold mb-2">{value.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {value.description}
-                  </p>
-                </CardContent>
-              </Card>
+        <motion.div variants={staggerItem} className="text-center mb-8 sm:mb-10">
+          <h2 className="text-2xl sm:text-3xl font-bold">What I Do</h2>
+          <p className="text-muted-foreground mt-2 text-sm sm:text-base">Complete solutions from database to deployment</p>
+        </motion.div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
+          {services.map((service) => (
+            <motion.div key={service.title} variants={staggerItem}>
+              <div className="group relative rounded-3xl border border-border/40 bg-card p-6 sm:p-8 h-full hover-lift overflow-hidden">
+                <div className={`absolute top-0 right-0 h-32 w-32 bg-gradient-to-br ${service.gradient} opacity-[0.04] rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:opacity-[0.08] transition-opacity duration-500`} />
+                <div className={`relative h-13 w-13 sm:h-14 sm:w-14 rounded-2xl bg-gradient-to-br ${service.gradient} flex items-center justify-center mb-5 shadow-lg`}>
+                  <service.icon className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
+                </div>
+                <h3 className="relative text-lg font-bold mb-2.5">{service.title}</h3>
+                <p className="relative text-sm sm:text-[15px] text-muted-foreground leading-relaxed">
+                  {service.description}
+                </p>
+              </div>
             </motion.div>
           ))}
         </div>
       </motion.div>
 
-      {/* Team Section */}
+      {/* Experience */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
-        className="mb-12"
+        className="mb-10 sm:mb-14"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">Meet Our Team</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-          {team.map((member, index) => (
-            <motion.div
-              key={member.name}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
-            >
-              <Card className="rounded-2xl border-border/50 shadow-sm hover:shadow-md transition-shadow">
-                <CardContent className="p-6 text-center">
-                  <div
-                    className={`h-20 w-20 rounded-full bg-gradient-to-br ${member.color} mx-auto mb-4 flex items-center justify-center`}
-                  >
-                    <span className="text-2xl font-bold text-white">
-                      {member.name
-                        .split(' ')
-                        .map((n) => n[0])
-                        .join('')}
+        <div className="text-center mb-8 sm:mb-10">
+          <h2 className="text-2xl sm:text-3xl font-bold">Experience</h2>
+          <p className="text-muted-foreground mt-2 text-sm sm:text-base">Building real products, real systems</p>
+        </div>
+        <div className="relative rounded-3xl overflow-hidden border border-border/40 bg-card">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.03] via-transparent to-blue-500/[0.03]" />
+          <div className="relative p-6 sm:p-10 lg:p-12">
+            <div className="flex flex-col sm:flex-row items-start gap-5 sm:gap-6">
+              <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-indigo-500/25">
+                <Zap className="h-7 w-7 sm:h-8 sm:w-8 text-white" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl sm:text-2xl font-bold mb-1">Full Stack Developer</h3>
+                <p className="text-indigo-500 dark:text-indigo-400 font-semibold text-sm sm:text-base mb-3">
+                  Gigbitesoft.com
+                </p>
+                <p className="text-muted-foreground leading-relaxed text-sm sm:text-base max-w-3xl">
+                  2 years of experience working on production-grade web applications and SaaS platforms,
+                  designing complete frontend-backend architecture, and delivering projects end-to-end.
+                  Built complete SaaS products handling frontend, backend, database design, and UI/UX —
+                  from initial architecture to deployment.
+                </p>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {['React', 'Next.js', 'Laravel', 'MySQL', 'REST APIs', 'Git', 'SaaS'].map((tech) => (
+                    <span key={tech} className="px-3 py-1 rounded-xl bg-muted/60 text-xs font-medium text-muted-foreground">
+                      {tech}
                     </span>
-                  </div>
-                  <h3 className="text-lg font-semibold">{member.name}</h3>
-                  <p className="text-sm text-muted-foreground">{member.role}</p>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </motion.div>
 
-      {/* Stats Section */}
+      {/* Why Work With Me */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.25 }}
+        className="mb-10 sm:mb-14"
+      >
+        <div className="text-center mb-8 sm:mb-10">
+          <h2 className="text-2xl sm:text-3xl font-bold">Why Work With Me</h2>
+          <p className="text-muted-foreground mt-2 text-sm sm:text-base">What sets my work apart</p>
+        </div>
+        <div className="relative rounded-3xl overflow-hidden border border-border/40 bg-card">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.03] via-transparent to-blue-500/[0.03]" />
+          <div className="relative p-6 sm:p-10 lg:p-12">
+            <div className="space-y-4">
+              {whyMe.map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -15 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: 0.3 + index * 0.08 }}
+                  className="flex items-start gap-4"
+                >
+                  <div className="h-7 w-7 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center flex-shrink-0 mt-0.5 shadow-md">
+                    <span className="text-white text-xs font-bold">✦</span>
+                  </div>
+                  <p className="text-sm sm:text-[15px] text-muted-foreground leading-relaxed">{item}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Stats */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.3 }}
+        className="mb-10 sm:mb-14"
       >
-        <Card className="rounded-2xl border-border/50 shadow-sm bg-gradient-to-br from-muted/50 to-muted">
-          <CardContent className="p-6 sm:p-8">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+        <div className="relative rounded-3xl overflow-hidden border border-border/40 bg-card">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.03] via-transparent to-blue-500/[0.03]" />
+          <div className="relative p-6 sm:p-10 lg:p-12">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
               {stats.map((stat) => (
                 <div key={stat.label} className="text-center">
-                  <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center mx-auto mb-3">
-                    <stat.icon className="h-6 w-6 text-white" />
+                  <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg shadow-indigo-500/20">
+                    <stat.icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                   </div>
-                  <p className="text-2xl sm:text-3xl font-bold">{stat.value}</p>
-                  <p className="text-sm text-muted-foreground mt-1">{stat.label}</p>
+                  <p className="text-2xl sm:text-3xl lg:text-4xl font-extrabold gradient-text">{stat.value}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-1 font-medium">{stat.label}</p>
                 </div>
               ))}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Contact CTA */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.35 }}
+      >
+        <div className="relative rounded-3xl overflow-hidden mesh-gradient px-5 py-12 sm:px-10 sm:py-16 text-center text-white">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-3">Let&apos;s Build Something Great</h2>
+          <p className="text-white/60 mb-6 sm:mb-8 max-w-lg mx-auto text-sm sm:text-base">
+            Get in touch today for your website or mobile app project.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+            <Button
+              onClick={() => navigate('contact')}
+              className="rounded-2xl bg-gradient-to-r from-indigo-500 to-blue-600 text-white hover:from-indigo-600 hover:to-blue-700 shadow-lg shadow-indigo-500/25 px-8 sm:px-10 h-12 sm:h-13 text-sm sm:text-base btn-shine"
+            >
+              <MessageSquare className="h-4 w-4 mr-2" />
+              Contact Me
+            </Button>
+            <a
+              href="https://wa.me/923392409950"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-2xl border border-white/20 text-white bg-white/5 hover:bg-white/10 font-semibold px-8 sm:px-10 h-12 sm:h-13 text-sm sm:text-base transition-all duration-300 backdrop-blur-sm flex items-center justify-center"
+            >
+              <Phone className="h-4 w-4 mr-2" />
+              WhatsApp
+            </a>
+          </div>
+        </div>
       </motion.div>
     </div>
   );
@@ -611,111 +833,155 @@ export function ContactPage() {
   const contactInfo = [
     {
       icon: MapPin,
-      title: 'Address',
-      detail: '123 Commerce Street, Suite 456\nNew York, NY 10001',
+      title: 'Location',
+      detail: 'Islamabad, Pakistan',
+      gradient: 'from-indigo-500 to-blue-600',
     },
     {
       icon: Phone,
-      title: 'Phone',
-      detail: '+1 (555) 123-4567',
+      title: 'WhatsApp',
+      detail: '+92 339 2409950',
+      href: 'https://wa.me/923392409950',
+      gradient: 'from-blue-500 to-cyan-500',
     },
     {
       icon: Mail,
       title: 'Email',
-      detail: 'hello@luxestore.com',
+      detail: 'mohammadsharique2409950@gmail.com',
+      href: 'mailto:mohammadsharique2409950@gmail.com',
+      gradient: 'from-indigo-500 to-violet-500',
     },
     {
-      icon: Clock,
-      title: 'Business Hours',
-      detail: 'Mon - Fri: 9:00 AM - 6:00 PM\nSat - Sun: 10:00 AM - 4:00 PM',
+      icon: Linkedin,
+      title: 'LinkedIn',
+      detail: 'linkedin.com/in/m-sharique-sabir',
+      href: 'https://www.linkedin.com/in/m-sharique-sabir/',
+      gradient: 'from-blue-600 to-indigo-500',
+    },
+    {
+      icon: Github,
+      title: 'GitHub',
+      detail: 'github.com/m-sharique-sabir',
+      href: 'https://github.com/m-sharique-sabir',
+      gradient: 'from-slate-600 to-slate-800',
     },
   ];
 
   return (
-    <div className="min-h-screen pb-12">
-      {/* Header */}
+    <div className="min-h-screen pb-16 sm:pb-24">
+      {/* Hero */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="mb-8"
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        className="relative rounded-3xl overflow-hidden mb-10 sm:mb-14"
       >
-        <h1 className="text-3xl font-bold tracking-tight">Get in Touch</h1>
-        <p className="text-muted-foreground mt-2">
-          Have a question or feedback? We&apos;d love to hear from you.
-        </p>
+        <div className="mesh-gradient px-5 py-14 sm:px-10 sm:py-20 lg:px-16 lg:py-24 text-center text-white">
+          <div className="absolute top-10 right-[15%] h-48 w-48 sm:h-64 sm:w-64 rounded-full bg-indigo-500/15 blur-3xl animate-float" />
+          <div className="absolute bottom-10 left-[15%] h-40 w-40 sm:h-56 sm:w-56 rounded-full bg-blue-500/12 blur-3xl animate-float" style={{ animationDelay: '1.5s' }} />
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="relative z-10 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/15 border border-indigo-500/25 text-indigo-300 text-xs font-semibold tracking-wide uppercase mb-5 sm:mb-6"
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-pulse" />
+            Let&apos;s Connect
+          </motion.div>
+          <motion.h1
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.25 }}
+            className="relative z-10 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight"
+          >
+            <span>Get in</span>{' '}
+            <span className="gradient-text">Touch</span>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="relative z-10 mt-4 sm:mt-5 text-base sm:text-lg text-white/60 max-w-xl mx-auto leading-relaxed"
+          >
+            Have a question, feedback, or partnership idea? We&apos;d love to hear from you.
+          </motion.p>
+        </div>
       </motion.div>
 
-      {/* Two-Column Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-8">
-        {/* Contact Form */}
+      {/* Two-Column: Form + Info */}
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-5 sm:gap-6 lg:gap-8 mb-10 sm:mb-14">
+        {/* Contact Form — wider column */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="lg:col-span-3"
         >
-          <Card className="rounded-2xl border-border/50 shadow-sm h-full">
-            <CardHeader>
-              <CardTitle className="text-lg">Send us a message</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="text-sm font-medium mb-1.5 block">Name</label>
-                  <Input
-                    placeholder="Your name"
-                    value={formData.name}
-                    onChange={(e) => handleChange('name', e.target.value)}
-                    className="rounded-xl"
-                  />
+          <div className="relative rounded-3xl border border-border/40 bg-card overflow-hidden h-full">
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.02] via-transparent to-blue-500/[0.02]" />
+            <div className="relative p-5 sm:p-8 lg:p-10">
+              <h2 className="text-xl sm:text-2xl font-bold mb-1">Send a Message</h2>
+              <p className="text-sm text-muted-foreground mb-6 sm:mb-8">We typically respond within 24 hours.</p>
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                  <div>
+                    <label className="text-sm font-semibold mb-2 block">Name</label>
+                    <Input
+                      placeholder="Your name"
+                      value={formData.name}
+                      onChange={(e) => handleChange('name', e.target.value)}
+                      className="h-12 rounded-2xl bg-muted/30 border-border/40 focus-visible:border-indigo-400 focus-visible:ring-indigo-400/20"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-semibold mb-2 block">Email</label>
+                    <Input
+                      type="email"
+                      placeholder="you@example.com"
+                      value={formData.email}
+                      onChange={(e) => handleChange('email', e.target.value)}
+                      className="h-12 rounded-2xl bg-muted/30 border-border/40 focus-visible:border-indigo-400 focus-visible:ring-indigo-400/20"
+                    />
+                  </div>
                 </div>
                 <div>
-                  <label className="text-sm font-medium mb-1.5 block">Email</label>
-                  <Input
-                    type="email"
-                    placeholder="you@example.com"
-                    value={formData.email}
-                    onChange={(e) => handleChange('email', e.target.value)}
-                    className="rounded-xl"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium mb-1.5 block">Subject</label>
+                  <label className="text-sm font-semibold mb-2 block">Subject</label>
                   <Input
                     placeholder="What is this about?"
                     value={formData.subject}
                     onChange={(e) => handleChange('subject', e.target.value)}
-                    className="rounded-xl"
+                    className="h-12 rounded-2xl bg-muted/30 border-border/40 focus-visible:border-indigo-400 focus-visible:ring-indigo-400/20"
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium mb-1.5 block">Message</label>
+                  <label className="text-sm font-semibold mb-2 block">Message</label>
                   <textarea
                     placeholder="Tell us more..."
                     value={formData.message}
                     onChange={(e) => handleChange('message', e.target.value)}
                     rows={5}
-                    className="border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 flex field-sizing-content min-h-16 w-full rounded-xl border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] md:text-sm resize-none"
+                    className="border-input placeholder:text-muted-foreground focus-visible:border-indigo-400 focus-visible:ring-indigo-400/20 flex w-full rounded-2xl border bg-muted/30 px-4 py-3 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] md:text-sm resize-none min-h-[120px]"
                   />
                 </div>
                 <Button
                   type="submit"
-                  className="w-full rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600 shadow-lg"
+                  className="w-full sm:w-auto rounded-2xl bg-gradient-to-r from-indigo-500 to-blue-600 text-white hover:from-indigo-600 hover:to-blue-700 shadow-lg shadow-indigo-500/20 px-8 sm:px-10 h-12 sm:h-13 text-sm sm:text-base btn-shine"
                 >
                   <MessageSquare className="h-4 w-4 mr-2" />
                   Send Message
                 </Button>
               </form>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </motion.div>
 
-        {/* Contact Info */}
+        {/* Contact Info — narrower column */}
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="space-y-4"
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="lg:col-span-2 flex flex-col gap-4 sm:gap-5"
         >
           {contactInfo.map((info, index) => (
             <motion.div
@@ -724,21 +990,31 @@ export function ContactPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.3 + index * 0.08 }}
             >
-              <Card className="rounded-2xl border-border/50 shadow-sm hover:shadow-md transition-shadow">
-                <CardContent className="p-5">
-                  <div className="flex items-start gap-4">
-                    <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-violet-100 to-fuchsia-100 dark:from-violet-950 dark:to-fuchsia-950 flex items-center justify-center flex-shrink-0">
-                      <info.icon className="h-5 w-5 text-violet-600 dark:text-violet-400" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-sm mb-1">{info.title}</h3>
-                      <p className="text-sm text-muted-foreground whitespace-pre-line">
+              <div className="group rounded-3xl border border-border/40 bg-card p-5 sm:p-6 hover-lift overflow-hidden relative">
+                <div className={`absolute top-0 right-0 h-24 w-24 bg-gradient-to-br ${info.gradient} opacity-[0.04] rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:opacity-[0.08] transition-opacity duration-500`} />
+                <div className="relative flex items-start gap-4">
+                  <div className={`h-12 w-12 rounded-2xl bg-gradient-to-br ${info.gradient} flex items-center justify-center flex-shrink-0 shadow-lg`}>
+                    <info.icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-sm sm:text-base mb-1">{info.title}</h3>
+                    {'href' in info && info.href ? (
+                      <a
+                        href={info.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-indigo-500 dark:text-indigo-400 hover:underline leading-relaxed break-all"
+                      >
+                        {info.detail}
+                      </a>
+                    ) : (
+                      <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                         {info.detail}
                       </p>
-                    </div>
+                    )}
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </motion.div>
           ))}
         </motion.div>
@@ -750,10 +1026,17 @@ export function ContactPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
       >
-        <div className="h-64 rounded-2xl bg-muted flex flex-col items-center justify-center border border-border/50">
-          <MapPin className="h-10 w-10 text-muted-foreground mb-3" />
-          <p className="text-sm text-muted-foreground font-medium">Map View</p>
-          <p className="text-xs text-muted-foreground/60 mt-1">123 Commerce Street, New York</p>
+        <div className="relative rounded-3xl overflow-hidden border border-border/40 bg-card">
+          <div className="h-64 sm:h-80 lg:h-96 flex flex-col items-center justify-center relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.03] via-transparent to-blue-500/[0.03]" />
+            <div className="relative flex flex-col items-center">
+              <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-blue-500/10 border border-indigo-500/15 flex items-center justify-center mb-4">
+                <MapPin className="h-7 w-7 sm:h-8 sm:w-8 text-indigo-500 dark:text-indigo-400" />
+              </div>
+              <p className="text-base sm:text-lg font-bold mb-1">Islamabad</p>
+              <p className="text-sm text-muted-foreground">Pakistan</p>
+            </div>
+          </div>
         </div>
       </motion.div>
     </div>
@@ -828,8 +1111,8 @@ export function FAQPage() {
         className="mb-8"
       >
         <div className="flex items-center gap-3 mb-2">
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-violet-100 to-fuchsia-100 dark:from-violet-950 dark:to-fuchsia-950 flex items-center justify-center">
-            <HelpCircle className="h-5 w-5 text-violet-600 dark:text-violet-400" />
+          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-100 to-blue-100 dark:from-indigo-950 dark:to-blue-950 flex items-center justify-center">
+            <HelpCircle className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
           </div>
           <h1 className="text-3xl font-bold tracking-tight">Frequently Asked Questions</h1>
         </div>
@@ -850,7 +1133,7 @@ export function FAQPage() {
             <Accordion type="single" collapsible className="w-full">
               {faqItems.map((item, index) => (
                 <AccordionItem key={index} value={`item-${index}`}>
-                  <AccordionTrigger className="text-left text-sm sm:text-base font-medium hover:no-underline hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
+                  <AccordionTrigger className="text-left text-sm sm:text-base font-medium hover:no-underline hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                     {item.question}
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground leading-relaxed text-sm sm:text-base">
@@ -871,7 +1154,7 @@ export function FAQPage() {
       >
         <Card className="rounded-2xl border-border/50 shadow-sm bg-gradient-to-br from-muted/50 to-muted">
           <CardContent className="p-8 sm:p-12 text-center">
-            <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center mx-auto mb-4">
+            <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center mx-auto mb-4">
               <MessageSquare className="h-7 w-7 text-white" />
             </div>
             <h2 className="text-xl font-bold mb-2">Still have questions?</h2>
@@ -880,7 +1163,7 @@ export function FAQPage() {
             </p>
             <Button
               onClick={() => navigate('contact')}
-              className="rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600 shadow-lg px-8"
+              className="rounded-xl bg-gradient-to-r from-indigo-500 to-blue-600 text-white hover:from-indigo-600 hover:to-blue-600 shadow-lg px-8"
             >
               <Mail className="h-4 w-4 mr-2" />
               Contact Us
@@ -912,7 +1195,7 @@ export function NotFoundPage() {
           transition={{ duration: 0.7, delay: 0.1 }}
         >
           <h1
-            className="text-8xl sm:text-9xl lg:text-[12rem] font-extrabold bg-gradient-to-br from-violet-500 via-fuchsia-500 to-pink-500 bg-clip-text text-transparent leading-none"
+            className="text-7xl sm:text-8xl lg:text-[10rem] font-extrabold bg-gradient-to-br from-indigo-500 via-blue-600 to-indigo-600 bg-clip-text text-transparent leading-none"
           >
             404
           </h1>
@@ -940,7 +1223,7 @@ export function NotFoundPage() {
         >
           <Button
             onClick={() => navigate('home')}
-            className="rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600 shadow-lg px-8 h-12"
+            className="rounded-xl bg-gradient-to-r from-indigo-500 to-blue-600 text-white hover:from-indigo-600 hover:to-blue-600 shadow-lg px-8 h-12"
           >
             <Home className="h-4 w-4 mr-2" />
             Go Home

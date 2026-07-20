@@ -129,25 +129,35 @@ export function Navbar() {
                 </Button>
                 <AnimatePresence>
                   {searchOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                      className="absolute right-0 top-12 sm:top-14 w-[calc(100vw-2rem)] sm:w-96 bg-popover border border-border rounded-2xl shadow-2xl p-4 z-[60]"
-                    >
-                      <form onSubmit={handleSearch}>
-                        <div className="relative">
-                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                          <Input
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="Search products..."
-                            className="pl-10 rounded-xl"
-                            autoFocus
-                          />
-                        </div>
-                      </form>
-                    </motion.div>
+                    <>
+                      {/* Mobile: full-width fixed overlay */}
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9996] sm:hidden"
+                        onClick={() => setSearchOpen(false)}
+                      />
+                      <motion.div
+                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                        className="fixed left-4 right-4 top-20 z-[9997] sm:absolute sm:left-auto sm:right-0 sm:top-14 sm:w-96 bg-popover border border-border rounded-2xl shadow-2xl p-4 sm:z-[60]"
+                      >
+                        <form onSubmit={handleSearch}>
+                          <div className="relative">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input
+                              value={searchQuery}
+                              onChange={(e) => setSearchQuery(e.target.value)}
+                              placeholder="Search products..."
+                              className="pl-10 rounded-xl"
+                              autoFocus
+                            />
+                          </div>
+                        </form>
+                      </motion.div>
+                    </>
                   )}
                 </AnimatePresence>
               </div>

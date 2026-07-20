@@ -145,7 +145,7 @@ function FilterSidebar({
             Price Range
           </AccordionTrigger>
           <AccordionContent>
-            <div className="space-y-4 px-1">
+            <div className="space-y-4 px-1 pt-2 pb-1">
               <Slider
                 min={0}
                 max={3000}

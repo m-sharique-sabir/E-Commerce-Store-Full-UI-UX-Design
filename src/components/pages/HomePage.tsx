@@ -38,7 +38,7 @@ export function HomePage() {
   return (
     <div className="min-h-screen">
       {/* ──────────────── Hero Section ──────────────── */}
-      <section className="relative overflow-hidden mesh-gradient noise-overlay">
+      <section className="relative overflow-hidden mesh-gradient noise-overlay" style={{ width: '100vw', marginLeft: 'calc(-50vw + 50%)' }}>
         {/* Animated orbs */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <motion.div
@@ -90,7 +90,7 @@ export function HomePage() {
           >
             Discover
             <br />
-            <span className="bg-gradient-to-r from-indigo-200 via-blue-200 to-indigo-100 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-300 bg-clip-text text-transparent">
               Premium
             </span>{' '}
             Products

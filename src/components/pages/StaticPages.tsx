@@ -86,7 +86,8 @@ export function CategoriesPage() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        className="relative rounded-3xl overflow-hidden mb-10 sm:mb-14"
+        className="relative overflow-hidden mb-10 sm:mb-14"
+        style={{ width: '100vw', marginLeft: 'calc(-50vw + 50%)' }}
       >
         <div className="mesh-gradient px-5 py-14 sm:px-10 sm:py-20 lg:px-16 lg:py-24 text-center text-white">
           <motion.div
@@ -492,7 +493,8 @@ export function AboutPage() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        className="relative rounded-3xl overflow-hidden mb-10 sm:mb-14"
+        className="relative overflow-hidden mb-10 sm:mb-14"
+        style={{ width: '100vw', marginLeft: 'calc(-50vw + 50%)' }}
       >
         <div className="mesh-gradient px-5 py-16 sm:px-10 sm:py-20 lg:px-16 lg:py-24 text-center text-white">
           <div className="absolute top-10 left-[10%] h-48 w-48 sm:h-64 sm:w-64 rounded-full bg-indigo-500/15 blur-3xl animate-float" />
@@ -775,7 +777,7 @@ export function AboutPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.35 }}
       >
-        <div className="relative rounded-3xl overflow-hidden mesh-gradient px-5 py-12 sm:px-10 sm:py-16 text-center text-white">
+        <div className="relative overflow-hidden mesh-gradient px-5 py-12 sm:px-10 sm:py-16 text-center text-white" style={{ width: '100vw', marginLeft: 'calc(-50vw + 50%)' }}>
           <h2 className="text-2xl sm:text-3xl font-bold mb-3">Let&apos;s Build Something Great</h2>
           <p className="text-white/60 mb-6 sm:mb-8 max-w-lg mx-auto text-sm sm:text-base">
             Get in touch today for your website or mobile app project.
@@ -874,7 +876,8 @@ export function ContactPage() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        className="relative rounded-3xl overflow-hidden mb-10 sm:mb-14"
+        className="relative overflow-hidden mb-10 sm:mb-14"
+        style={{ width: '100vw', marginLeft: 'calc(-50vw + 50%)' }}
       >
         <div className="mesh-gradient px-5 py-14 sm:px-10 sm:py-20 lg:px-16 lg:py-24 text-center text-white">
           <div className="absolute top-10 right-[15%] h-48 w-48 sm:h-64 sm:w-64 rounded-full bg-indigo-500/15 blur-3xl animate-float" />
@@ -1020,21 +1023,28 @@ export function ContactPage() {
         </motion.div>
       </div>
 
-      {/* Map Placeholder */}
+      {/* Map */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
       >
         <div className="relative rounded-3xl overflow-hidden border border-border/40 bg-card">
-          <div className="h-64 sm:h-80 lg:h-96 flex flex-col items-center justify-center relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.03] via-transparent to-blue-500/[0.03]" />
-            <div className="relative flex flex-col items-center">
-              <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-blue-500/10 border border-indigo-500/15 flex items-center justify-center mb-4">
-                <MapPin className="h-7 w-7 sm:h-8 sm:w-8 text-indigo-500 dark:text-indigo-400" />
-              </div>
-              <p className="text-base sm:text-lg font-bold mb-1">Islamabad</p>
-              <p className="text-sm text-muted-foreground">Pakistan</p>
+          <div className="h-64 sm:h-80 lg:h-96 relative">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3323.846!2d73.0479!3d33.6844!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38dfbfd59e25e7ab%3A0x4c1c2e3e50c0e4c0!2sIslamabad%2C%20Pakistan!5e0!3m2!1sen!2s!4v1700000000000!5m2!1sen!2s"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="absolute inset-0"
+              title="Islamabad Location Map"
+            />
+            <div className="absolute bottom-4 left-4 z-10 flex items-center gap-2 px-4 py-2 rounded-xl bg-card/90 backdrop-blur-md border border-border/40 shadow-lg">
+              <MapPin className="h-4 w-4 text-indigo-500 dark:text-indigo-400" />
+              <span className="text-sm font-semibold">Islamabad, Pakistan</span>
             </div>
           </div>
         </div>

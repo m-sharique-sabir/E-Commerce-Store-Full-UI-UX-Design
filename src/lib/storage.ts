@@ -18,7 +18,10 @@ const STORAGE_KEYS = {
   SEARCH_HISTORY: 'ecom_search_history',
   RECENTLY_VIEWED: 'ecom_recently_viewed',
   INITIALIZED: 'ecom_initialized',
+  DATA_VERSION: 'ecom_data_version',
 };
+
+const DATA_VERSION = 'v2'; // Increment when data changes
 
 function isBrowser(): boolean {
   return typeof window !== 'undefined';
@@ -45,6 +48,16 @@ function setToStorage<T>(key: string, value: T): void {
 
 export function initializeData(): void {
   if (!isBrowser()) return;
+  const currentVersion = getFromStorage(STORAGE_KEYS.DATA_VERSION, '');
+  const needsReinit = currentVersion !== DATA_VERSION;
+  if (needsReinit) {
+    // Re-initialize products, categories, brands, and reviews when data version changes
+    setToStorage(STORAGE_KEYS.PRODUCTS, getProducts());
+    setToStorage(STORAGE_KEYS.CATEGORIES, getCategories());
+    setToStorage(STORAGE_KEYS.BRANDS, getBrands());
+    setToStorage(STORAGE_KEYS.REVIEWS, getReviews());
+    setToStorage(STORAGE_KEYS.DATA_VERSION, DATA_VERSION);
+  }
   const initialized = getFromStorage(STORAGE_KEYS.INITIALIZED, false);
   if (!initialized) {
     setToStorage(STORAGE_KEYS.PRODUCTS, getProducts());

@@ -262,6 +262,7 @@ export function ProductDetailPage() {
                   <button
                     key={idx}
                     onClick={() => setSelectedImage(idx)}
+                    aria-label={`View image ${idx + 1} of ${product.name}`}
                     className={`relative flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden border-2 transition-all duration-200 ${
                       selectedImage === idx
                         ? 'border-violet-500 ring-2 ring-violet-500/20'

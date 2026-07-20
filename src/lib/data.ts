@@ -22,6 +22,20 @@ const BRANDS: Brand[] = [
   { id: 'brand-8', name: 'North Face', slug: 'north-face', logo: '⛰️' },
   { id: 'brand-9', name: 'Levi\'s', slug: 'levis', logo: '👖' },
   { id: 'brand-10', name: 'Canon', slug: 'canon', logo: '📷' },
+  { id: 'brand-11', name: 'Philips', slug: 'philips', logo: '💡' },
+  { id: 'brand-12', name: 'Nespresso', slug: 'nespresso', logo: '☕' },
+  { id: 'brand-13', name: 'West Elm', slug: 'west-elm', logo: '🏠' },
+  { id: 'brand-14', name: 'IKEA', slug: 'ikea', logo: '🛋️' },
+  { id: 'brand-15', name: 'The Ordinary', slug: 'the-ordinary', logo: '🧴' },
+  { id: 'brand-16', name: 'CeraVe', slug: 'cerave', logo: '💧' },
+  { id: 'brand-17', name: 'Foreo', slug: 'foreo', logo: '✨' },
+  { id: 'brand-18', name: 'Jo Malone', slug: 'jo-malone', logo: '🌸' },
+  { id: 'brand-19', name: 'Penguin', slug: 'penguin', logo: '📖' },
+  { id: 'brand-20', name: 'LEGO', slug: 'lego', logo: '🧱' },
+  { id: 'brand-21', name: 'DJI', slug: 'dji', logo: '🚁' },
+  { id: 'brand-22', name: 'Garmin', slug: 'garmin', logo: '📍' },
+  { id: 'brand-23', name: 'Brooklinen', slug: 'brooklinen', logo: '🛏️' },
+  { id: 'brand-24', name: 'Vitruvi', slug: 'vitruvi', logo: '🌿' },
 ];
 
 const PRODUCT_TEMPLATES: Omit<Product, 'id' | 'name' | 'slug' | 'price' | 'originalPrice' | 'discount' | 'rating' | 'reviewCount' | 'stock' | 'featured' | 'bestSeller' | 'isNew' | 'images' | 'category' | 'categorySlug' | 'brand' | 'tags' | 'specifications' | 'createdAt'>[] = [];
@@ -62,14 +76,14 @@ function generateProducts(): Product[] {
   ];
 
   const homeProducts = [
-    { name: 'Smart LED Desk Lamp', brand: 'Dyson', price: 299, specs: { Lumens: '1000+', Color: '2700K-6500K', Smart: 'App Control', USB: 'Type-C Charging' } },
+    { name: 'Smart LED Desk Lamp', brand: 'Philips', price: 299, specs: { Lumens: '1000+', Color: '2700K-6500K', Smart: 'App Control', USB: 'Type-C Charging' } },
     { name: 'Dyson Pure Hot+Cool', brand: 'Dyson', price: 649, specs: { Type: 'Purifier + Heater + Fan', HEPA: 'H13', Coverage: '800 sq ft', Modes: '4' } },
-    { name: 'Nespresso Vertuo Next', brand: 'Dyson', price: 179, specs: { Type: 'Capsule Espresso', Sizes: '5', Centrifusion: 'Yes', Tank: '37oz' } },
-    { name: 'Marble Coffee Table', brand: 'Dyson', price: 449, specs: { Material: 'Marble Top', Base: 'Brass', Size: '48" x 24"', Weight: '55 lbs' } },
-    { name: 'Ceramic Vase Set', brand: 'Dyson', price: 79, specs: { Pieces: '3', Material: 'Ceramic', Style: 'Minimalist', Sizes: 'S/M/L' } },
-    { name: 'Linen Throw Blanket', brand: 'Dyson', price: 89, specs: { Material: '100% Linen', Size: '50" x 70"', Weight: 'Light', Care: 'Machine Wash' } },
-    { name: 'Bamboo Shelf Unit', brand: 'Dyson', price: 199, specs: { Material: 'Bamboo', Shelves: '5', Size: '36" x 12" x 72"', Weight: '45 lbs' } },
-    { name: 'Aromatherapy Diffuser', brand: 'Dyson', price: 59, specs: { Capacity: '300ml', Timer: '1/3/6 hrs', LED: '7 Colors', Auto: 'Shut-off' } },
+    { name: 'Nespresso Vertuo Next', brand: 'Nespresso', price: 179, specs: { Type: 'Capsule Espresso', Sizes: '5', Centrifusion: 'Yes', Tank: '37oz' } },
+    { name: 'Marble Coffee Table', brand: 'West Elm', price: 449, specs: { Material: 'Marble Top', Base: 'Brass', Size: '48 x 24 inches', Weight: '55 lbs' } },
+    { name: 'Ceramic Vase Set', brand: 'West Elm', price: 79, specs: { Pieces: '3', Material: 'Ceramic', Style: 'Minimalist', Sizes: 'S/M/L' } },
+    { name: 'Linen Throw Blanket', brand: 'Brooklinen', price: 89, specs: { Material: '100% Linen', Size: '50 x 70 inches', Weight: 'Light', Care: 'Machine Wash' } },
+    { name: 'Bamboo Shelf Unit', brand: 'IKEA', price: 199, specs: { Material: 'Bamboo', Shelves: '5', Size: '36 x 12 x 72 inches', Weight: '45 lbs' } },
+    { name: 'Aromatherapy Diffuser', brand: 'Vitruvi', price: 59, specs: { Capacity: '300ml', Timer: '1/3/6 hrs', LED: '7 Colors', Auto: 'Shut-off' } },
   ];
 
   const sportsProducts = [
@@ -84,36 +98,36 @@ function generateProducts(): Product[] {
   ];
 
   const beautyProducts = [
-    { name: 'Vitamin C Serum', brand: 'Dyson', price: 45, specs: { Size: '30ml', Concentration: '20%', Type: 'L-Ascorbic', pH: '3.0-3.5' } },
-    { name: 'Retinol Night Cream', brand: 'Dyson', price: 55, specs: { Size: '50ml', Retinol: '0.5%', Type: 'Encapsulated', Usage: 'Night' } },
-    { name: 'Hyaluronic Acid Moisturizer', brand: 'Dyson', price: 38, specs: { Size: '60ml', HA: 'Multi-weight', SPF: 'None', Usage: 'AM/PM' } },
+    { name: 'Vitamin C Serum', brand: 'The Ordinary', price: 45, specs: { Size: '30ml', Concentration: '20%', Type: 'L-Ascorbic', pH: '3.0-3.5' } },
+    { name: 'Retinol Night Cream', brand: 'CeraVe', price: 55, specs: { Size: '50ml', Retinol: '0.5%', Type: 'Encapsulated', Usage: 'Night' } },
+    { name: 'Hyaluronic Acid Moisturizer', brand: 'The Ordinary', price: 38, specs: { Size: '60ml', HA: 'Multi-weight', SPF: 'None', Usage: 'AM/PM' } },
     { name: 'Professional Hair Dryer', brand: 'Dyson', price: 429, specs: { Wattage: '1600W', Speed: '3', Heat: '4', Weight: '1.8 lbs' } },
-    { name: 'Electric Facial Cleansing Brush', brand: 'Dyson', price: 99, specs: { Speeds: '2', Brush: 'Silicone', Waterproof: 'IPX7', Battery: 'USB-C' } },
-    { name: 'Luxury Perfume Set', brand: 'Dyson', price: 189, specs: { Bottles: '4', Sizes: '10ml each', Type: 'Eau de Parfum', Packaging: 'Gift Box' } },
+    { name: 'Electric Facial Cleansing Brush', brand: 'Foreo', price: 99, specs: { Speeds: '2', Brush: 'Silicone', Waterproof: 'IPX7', Battery: 'USB-C' } },
+    { name: 'Luxury Perfume Set', brand: 'Jo Malone', price: 189, specs: { Bottles: '4', Sizes: '10ml each', Type: 'Eau de Parfum', Packaging: 'Gift Box' } },
   ];
 
   const bookProducts = [
-    { name: 'Atomic Habits', brand: 'Apple', price: 16, specs: { Author: 'James Clear', Pages: '320', Format: 'Hardcover', ISBN: '978-0735211292' } },
-    { name: 'The Lean Startup', brand: 'Apple', price: 18, specs: { Author: 'Eric Ries', Pages: '336', Format: 'Hardcover', ISBN: '978-0307887894' } },
-    { name: 'Deep Work', brand: 'Apple', price: 15, specs: { Author: 'Cal Newport', Pages: '296', Format: 'Paperback', ISBN: '978-1455586696' } },
-    { name: 'Thinking, Fast and Slow', brand: 'Apple', price: 14, specs: { Author: 'Daniel Kahneman', Pages: '499', Format: 'Paperback', ISBN: '978-0374533557' } },
-    { name: 'The Design of Everyday Things', brand: 'Apple', price: 17, specs: { Author: 'Don Norman', Pages: '368', Format: 'Hardcover', ISBN: '978-0465050659' } },
-    { name: 'Zero to One', brand: 'Apple', price: 16, specs: { Author: 'Peter Thiel', Pages: '224', Format: 'Hardcover', ISBN: '978-0804139298' } },
+    { name: 'Atomic Habits', brand: 'Penguin', price: 16, specs: { Author: 'James Clear', Pages: '320', Format: 'Hardcover', ISBN: '978-0735211292' } },
+    { name: 'The Lean Startup', brand: 'Penguin', price: 18, specs: { Author: 'Eric Ries', Pages: '336', Format: 'Hardcover', ISBN: '978-0307887894' } },
+    { name: 'Deep Work', brand: 'Harper', price: 15, specs: { Author: 'Cal Newport', Pages: '296', Format: 'Paperback', ISBN: '978-1455586696' } },
+    { name: 'Thinking, Fast and Slow', brand: 'Harper', price: 14, specs: { Author: 'Daniel Kahneman', Pages: '499', Format: 'Paperback', ISBN: '978-0374533557' } },
+    { name: 'The Design of Everyday Things', brand: 'Penguin', price: 17, specs: { Author: 'Don Norman', Pages: '368', Format: 'Hardcover', ISBN: '978-0465050659' } },
+    { name: 'Zero to One', brand: 'Harper', price: 16, specs: { Author: 'Peter Thiel', Pages: '224', Format: 'Hardcover', ISBN: '978-0804139298' } },
   ];
 
   const toyProducts = [
-    { name: 'LEGO Architecture Set', brand: 'Apple', price: 79, specs: { Pieces: '597', Age: '12+', Theme: 'Architecture', Scale: '1:200' } },
-    { name: 'Strategy Board Game Collection', brand: 'Apple', price: 34, specs: { Players: '2-6', Time: '45-90 min', Age: '10+', Type: 'Strategy' } },
-    { name: 'RC Drone Pro', brand: 'Samsung', price: 299, specs: { Range: '4km', Camera: '4K', Flight: '30 min', GPS: 'Yes' } },
-    { name: 'Puzzle Cube Set', brand: 'Apple', price: 24, specs: { Pieces: '6 Pack', Difficulty: '3x3 to 7x7', Material: 'Stickerless', Smooth: 'Magnetic' } },
+    { name: 'LEGO Architecture Set', brand: 'LEGO', price: 79, specs: { Pieces: '597', Age: '12+', Theme: 'Architecture', Scale: '1:200' } },
+    { name: 'Strategy Board Game Collection', brand: 'Hasbro', price: 34, specs: { Players: '2-6', Time: '45-90 min', Age: '10+', Type: 'Strategy' } },
+    { name: 'RC Drone Pro', brand: 'DJI', price: 299, specs: { Range: '4km', Camera: '4K', Flight: '30 min', GPS: 'Yes' } },
+    { name: 'Puzzle Cube Set', brand: 'Rubiks', price: 24, specs: { Pieces: '6 Pack', Difficulty: '3x3 to 7x7', Material: 'Stickerless', Smooth: 'Magnetic' } },
   ];
 
   const autoProducts = [
-    { name: 'Dash Cam 4K', brand: 'Samsung', price: 149, specs: { Resolution: '4K', Viewing: '170°', Storage: 'up to 256GB', Night: 'Enhanced' } },
-    { name: 'Car Phone Mount', brand: 'Apple', price: 29, specs: { Type: 'Magnetic', Compatible: 'Universal', Rotation: '360°', Mount: 'Dashboard/Vent' } },
-    { name: 'Portable Jump Starter', brand: 'Samsung', price: 89, specs: { Peak: '2000A', Battery: '20000mAh', USB: 'Quick Charge 3.0', LED: 'Emergency' } },
-    { name: 'LED Interior Light Kit', brand: 'Samsung', price: 39, specs: { Type: 'RGB LED', App: 'Bluetooth', Modes: '16M Colors', Install: 'Plug & Play' } },
-    { name: 'Leather Seat Covers', brand: 'Apple', price: 129, specs: { Material: 'PU Leather', Fit: 'Universal', Set: 'Front + Rear', Color: 'Black' } },
+    { name: 'Dash Cam 4K', brand: 'Garmin', price: 149, specs: { Resolution: '4K', Viewing: '170 deg', Storage: 'up to 256GB', Night: 'Enhanced' } },
+    { name: 'Car Phone Mount', brand: 'Spigen', price: 29, specs: { Type: 'Magnetic', Compatible: 'Universal', Rotation: '360 deg', Mount: 'Dashboard/Vent' } },
+    { name: 'Portable Jump Starter', brand: 'NOCO', price: 89, specs: { Peak: '2000A', Battery: '20000mAh', USB: 'Quick Charge 3.0', LED: 'Emergency' } },
+    { name: 'LED Interior Light Kit', brand: 'Govee', price: 39, specs: { Type: 'RGB LED', App: 'Bluetooth', Modes: '16M Colors', Install: 'Plug & Play' } },
+    { name: 'Leather Seat Covers', brand: 'Coverking', price: 129, specs: { Material: 'PU Leather', Fit: 'Universal', Set: 'Front + Rear', Color: 'Black' } },
   ];
 
   const allTemplates = [
@@ -141,9 +155,9 @@ function generateProducts(): Product[] {
       const slug = item.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
       const imageBase = item.name.toLowerCase().replace(/[^a-z0-9]/g, '-');
       const images = [
-        `https://images.unsplash.com/photo-${1500000000000 + id * 137}?w=600&h=600&fit=crop`,
-        `https://images.unsplash.com/photo-${1500000000000 + id * 137 + 1}?w=600&h=600&fit=crop`,
-        `https://images.unsplash.com/photo-${1500000000000 + id * 137 + 2}?w=600&h=600&fit=crop`,
+        `https://picsum.photos/seed/${slug}/600/600`,
+        `https://picsum.photos/seed/${slug}-2/600/600`,
+        `https://picsum.photos/seed/${slug}-3/600/600`,
       ];
 
       products.push({

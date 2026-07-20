@@ -98,7 +98,7 @@ export function HomePage() {
               size="lg"
               variant="outline"
               onClick={() => navigate('categories')}
-              className="rounded-xl border-white/40 text-white hover:bg-white/10 font-semibold px-8 h-12 text-base backdrop-blur-sm"
+              className="rounded-xl border-white/60 bg-white/10 text-white hover:bg-white/20 hover:text-white font-semibold px-8 h-12 text-base backdrop-blur-sm"
             >
               Explore Categories
             </Button>

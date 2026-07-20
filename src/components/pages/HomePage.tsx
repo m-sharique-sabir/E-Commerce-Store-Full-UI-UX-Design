@@ -89,16 +89,15 @@ export function HomePage() {
             <Button
               size="lg"
               onClick={() => navigate('shop')}
-              className="rounded-xl bg-white text-violet-600 hover:bg-white/90 font-semibold px-8 h-12 text-base shadow-lg shadow-violet-700/30"
+              className="rounded-xl bg-white text-violet-600 hover:bg-white/90 font-semibold px-6 sm:px-8 h-12 text-base shadow-lg shadow-violet-700/30"
             >
               Shop Now
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <Button
               size="lg"
-              variant="outline"
               onClick={() => navigate('categories')}
-              className="rounded-xl border-white/60 bg-white/10 text-white hover:bg-white/20 hover:text-white font-semibold px-8 h-12 text-base backdrop-blur-sm"
+              className="rounded-xl border border-white/60 bg-white/10 text-white hover:bg-white/20 hover:text-white font-semibold px-6 sm:px-8 h-12 text-base backdrop-blur-sm"
             >
               Explore Categories
             </Button>
@@ -125,7 +124,7 @@ export function HomePage() {
           initial="initial"
           whileInView="animate"
           viewport={{ once: true, margin: '-50px' }}
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6"
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6"
         >
           {categories.slice(0, 8).map((category) => (
             <motion.div
@@ -141,14 +140,14 @@ export function HomePage() {
                   className="w-full h-full transition-transform duration-500 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <h3 className="font-semibold text-white text-base sm:text-lg leading-tight">
+                <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
+                  <h3 className="font-semibold text-white text-sm sm:text-base lg:text-lg leading-tight">
                     {category.name}
                   </h3>
-                  <p className="text-white/75 text-xs sm:text-sm mt-0.5 line-clamp-1">
+                  <p className="text-white/75 text-[10px] sm:text-xs lg:text-sm mt-0.5 line-clamp-1">
                     {category.description}
                   </p>
-                  <span className="inline-flex items-center gap-1 text-xs text-white/60 mt-1">
+                  <span className="inline-flex items-center gap-1 text-[10px] sm:text-xs text-white/60 mt-1">
                     {category.productCount} products
                   </span>
                 </div>
@@ -336,7 +335,7 @@ export function HomePage() {
           transition={{ duration: 0.6 }}
           className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 lg:py-16"
         >
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             <FeatureItem
               icon={Truck}
               title="Free Shipping"
@@ -376,13 +375,13 @@ function FeatureItem({
   description: string;
 }) {
   return (
-    <div className="flex flex-col items-center text-center gap-3">
-      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 text-violet-500 shrink-0">
-        <Icon className="h-7 w-7" />
+    <div className="flex flex-col items-center text-center gap-2 sm:gap-3">
+      <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 text-violet-500 shrink-0">
+        <Icon className="h-6 w-6 sm:h-7 sm:w-7" />
       </div>
       <div>
-        <h3 className="font-semibold text-base">{title}</h3>
-        <p className="text-sm text-muted-foreground mt-0.5">{description}</p>
+        <h3 className="font-semibold text-sm sm:text-base">{title}</h3>
+        <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">{description}</p>
       </div>
     </div>
   );

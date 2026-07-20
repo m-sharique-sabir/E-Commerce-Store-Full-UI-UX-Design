@@ -175,8 +175,8 @@ export function LoginPage() {
               </div>
 
               {/* Remember me + Forgot */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 min-w-0">
                   <Checkbox
                     id="remember-me"
                     checked={rememberMe}
@@ -550,7 +550,7 @@ export function ForgotPasswordPage() {
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: 0.2 }}
-              className="absolute top-6 left-6"
+              className="relative sm:absolute sm:top-6 sm:left-6 mb-4 sm:mb-0"
             >
               <button
                 type="button"

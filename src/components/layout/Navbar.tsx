@@ -126,7 +126,7 @@ export function Navbar() {
                     initial={{ opacity: 0, y: -10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                    className="absolute right-0 top-14 w-80 sm:w-96 bg-popover border border-border rounded-2xl shadow-2xl p-4 z-50"
+                    className="absolute right-0 top-14 w-[calc(100vw-2rem)] sm:w-96 bg-popover border border-border rounded-2xl shadow-2xl p-4 z-50"
                   >
                     <form onSubmit={handleSearch}>
                       <div className="relative">
@@ -225,7 +225,7 @@ export function Navbar() {
               ) : (
                 <Button
                   onClick={() => navigate('login')}
-                  className="rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600 hidden sm:flex"
+                  className="rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600 sm:flex"
                   size="sm"
                 >
                   Sign In
@@ -300,7 +300,7 @@ export function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="fixed right-0 top-0 bottom-0 w-80 bg-background border-l border-border z-50 p-6 overflow-y-auto"
+              className="fixed right-0 top-0 bottom-0 w-[85vw] max-w-sm bg-background border-l border-border z-50 p-6 overflow-y-auto"
             >
               <div className="flex items-center justify-between mb-8">
                 <span className="text-lg font-bold">Menu</span>

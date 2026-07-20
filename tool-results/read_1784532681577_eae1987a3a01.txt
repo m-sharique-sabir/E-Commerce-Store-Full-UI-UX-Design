@@ -1,0 +1,749 @@
+     1→'use client';
+     2→
+     3→import { useState, useMemo } from 'react';
+     4→import { motion, AnimatePresence } from 'framer-motion';
+     5→import { SlidersHorizontal, X, Grid3X3, LayoutList } from 'lucide-react';
+     6→import { useRouterStore } from '@/stores';
+     7→import { getStoredProducts, getStoredCategories, getStoredBrands } from '@/lib/storage';
+     8→import { ProductCard, ProductGrid, ProductImage, EmptyState, Rating } from '@/components/shared';
+     9→import { Button } from '@/components/ui/button';
+    10→import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+    11→import { Slider } from '@/components/ui/slider';
+    12→import { Badge } from '@/components/ui/badge';
+    13→import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
+    14→import { Checkbox } from '@/components/ui/checkbox';
+    15→import { Product, Category, Brand } from '@/lib/types';
+    16→import {
+    17→  Sheet,
+    18→  SheetContent,
+    19→  SheetHeader,
+    20→  SheetTitle,
+    21→  SheetTrigger,
+    22→} from '@/components/ui/sheet';
+    23→import {
+    24→  Breadcrumb,
+    25→  BreadcrumbList,
+    26→  BreadcrumbItem,
+    27→  BreadcrumbLink,
+    28→  BreadcrumbPage,
+    29→  BreadcrumbSeparator,
+    30→} from '@/components/ui/breadcrumb';
+    31→import {
+    32→  Pagination as PaginationNav,
+    33→  PaginationContent,
+    34→  PaginationItem,
+    35→  PaginationLink,
+    36→  PaginationPrevious,
+    37→  PaginationNext,
+    38→  PaginationEllipsis,
+    39→} from '@/components/ui/pagination';
+    40→
+    41→const PRODUCTS_PER_PAGE = 12;
+    42→
+    43→type SortOption = 'newest' | 'price-asc' | 'price-desc' | 'rating' | 'name-asc';
+    44→type ViewMode = 'grid' | 'list';
+    45→
+    46→/* ───────── Filter Sidebar (shared between desktop & mobile) ───────── */
+    47→interface FilterSidebarProps {
+    48→  categories: Category[];
+    49→  brands: Brand[];
+    50→  products: Product[];
+    51→  selectedCategories: string[];
+    52→  selectedBrands: string[];
+    53→  priceRange: [number, number];
+    54→  minRating: number;
+    55→  hasActiveFilters: boolean;
+    56→  onCategoryToggle: (slug: string) => void;
+    57→  onBrandToggle: (name: string) => void;
+    58→  onPriceChange: (value: number[]) => void;
+    59→  onRatingFilter: (rating: number) => void;
+    60→  onClearAll: () => void;
+    61→}
+    62→
+    63→function FilterSidebar({
+    64→  categories,
+    65→  brands,
+    66→  products,
+    67→  selectedCategories,
+    68→  selectedBrands,
+    69→  priceRange,
+    70→  minRating,
+    71→  hasActiveFilters,
+    72→  onCategoryToggle,
+    73→  onBrandToggle,
+    74→  onPriceChange,
+    75→  onRatingFilter,
+    76→  onClearAll,
+    77→}: FilterSidebarProps) {
+    78→  return (
+    79→    <div className="space-y-2">
+    80→      <Accordion type="multiple" defaultValue={['categories', 'brands', 'price', 'rating']} className="w-full">
+    81→        {/* Category Filter */}
+    82→        <AccordionItem value="categories">
+    83→          <AccordionTrigger className="text-sm font-semibold py-3 hover:no-underline">
+    84→            Categories
+    85→          </AccordionTrigger>
+    86→          <AccordionContent>
+    87→            <div className="space-y-2.5 max-h-64 overflow-y-auto pr-1 custom-scrollbar">
+    88→              {categories.map((category) => (
+    89→                <label
+    90→                  key={category.id}
+    91→                  className="flex items-center gap-2.5 cursor-pointer group"
+    92→                >
+    93→                  <Checkbox
+    94→                    checked={selectedCategories.includes(category.slug)}
+    95→                    onCheckedChange={() => onCategoryToggle(category.slug)}
+    96→                    className="group-hover:border-primary/50"
+    97→                  />
+    98→                  <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors flex-1">
+    99→                    {category.name}
+   100→                  </span>
+   101→                  <span className="text-xs text-muted-foreground/60">
+   102→                    ({category.productCount})
+   103→                  </span>
+   104→                </label>
+   105→              ))}
+   106→            </div>
+   107→          </AccordionContent>
+   108→        </AccordionItem>
+   109→
+   110→        {/* Brand Filter */}
+   111→        <AccordionItem value="brands">
+   112→          <AccordionTrigger className="text-sm font-semibold py-3 hover:no-underline">
+   113→            Brands
+   114→          </AccordionTrigger>
+   115→          <AccordionContent>
+   116→            <div className="space-y-2.5 max-h-64 overflow-y-auto pr-1 custom-scrollbar">
+   117→              {brands.map((brand) => {
+   118→                const count = products.filter((p) => p.brand === brand.name).length;
+   119→                return (
+   120→                  <label
+   121→                    key={brand.id}
+   122→                    className="flex items-center gap-2.5 cursor-pointer group"
+   123→                  >
+   124→                    <Checkbox
+   125→                      checked={selectedBrands.includes(brand.name)}
+   126→                      onCheckedChange={() => onBrandToggle(brand.name)}
+   127→                      className="group-hover:border-primary/50"
+   128→                    />
+   129→                    <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors flex-1">
+   130→                      {brand.logo} {brand.name}
+   131→                    </span>
+   132→                    <span className="text-xs text-muted-foreground/60">
+   133→                      ({count})
+   134→                    </span>
+   135→                  </label>
+   136→                );
+   137→              })}
+   138→            </div>
+   139→          </AccordionContent>
+   140→        </AccordionItem>
+   141→
+   142→        {/* Price Range Filter */}
+   143→        <AccordionItem value="price">
+   144→          <AccordionTrigger className="text-sm font-semibold py-3 hover:no-underline">
+   145→            Price Range
+   146→          </AccordionTrigger>
+   147→          <AccordionContent>
+   148→            <div className="space-y-4 px-1">
+   149→              <Slider
+   150→                min={0}
+   151→                max={3000}
+   152→                step={10}
+   153→                value={priceRange}
+   154→                onValueChange={onPriceChange}
+   155→                className="w-full"
+   156→              />
+   157→              <div className="flex items-center justify-between text-sm">
+   158→                <span className="font-medium text-muted-foreground">${priceRange[0]}</span>
+   159→                <span className="text-muted-foreground/50">—</span>
+   160→                <span className="font-medium text-muted-foreground">${priceRange[1]}</span>
+   161→              </div>
+   162→            </div>
+   163→          </AccordionContent>
+   164→        </AccordionItem>
+   165→
+   166→        {/* Rating Filter */}
+   167→        <AccordionItem value="rating">
+   168→          <AccordionTrigger className="text-sm font-semibold py-3 hover:no-underline">
+   169→            Rating
+   170→          </AccordionTrigger>
+   171→          <AccordionContent>
+   172→            <div className="space-y-1">
+   173→              {[4, 3, 2, 1].map((rating) => (
+   174→                <button
+   175→                  key={rating}
+   176→                  onClick={() => onRatingFilter(rating)}
+   177→                  className={`flex items-center gap-2 w-full px-2 py-2 rounded-lg transition-all text-left ${
+   178→                    minRating === rating
+   179→                      ? 'bg-primary/10 text-primary'
+   180→                      : 'hover:bg-muted text-muted-foreground hover:text-foreground'
+   181→                  }`}
+   182→                >
+   183→                  <Rating rating={rating} />
+   184→                  <span className="text-sm ml-1">& Up</span>
+   185→                  {minRating === rating && (
+   186→                    <X className="h-3.5 w-3.5 ml-auto" />
+   187→                  )}
+   188→                </button>
+   189→              ))}
+   190→            </div>
+   191→          </AccordionContent>
+   192→        </AccordionItem>
+   193→      </Accordion>
+   194→
+   195→      {/* Clear All Filters */}
+   196→      {hasActiveFilters && (
+   197→        <div className="pt-4 px-1">
+   198→          <Button
+   199→            variant="outline"
+   200→            size="sm"
+   201→            onClick={onClearAll}
+   202→            className="w-full rounded-xl text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/30"
+   203→          >
+   204→            <X className="h-4 w-4 mr-1.5" />
+   205→            Clear All Filters
+   206→          </Button>
+   207→        </div>
+   208→      )}
+   209→    </div>
+   210→  );
+   211→}
+   212→
+   213→/* ───────── List View Item ───────── */
+   214→function ProductListItem({ product, index }: { product: Product; index: number }) {
+   215→  const navigate = useRouterStore((s) => s.navigate);
+   216→
+   217→  return (
+   218→    <motion.div
+   219→      initial={{ opacity: 0, y: 20 }}
+   220→      animate={{ opacity: 1, y: 0 }}
+   221→      transition={{ duration: 0.3, delay: index * 0.04 }}
+   222→      className="group cursor-pointer"
+   223→      onClick={() => navigate('product', { id: product.id })}
+   224→    >
+   225→      <div className="flex gap-4 sm:gap-6 rounded-2xl border bg-card p-4 hover:shadow-lg hover:border-border transition-all duration-300">
+   226→        {/* Image */}
+   227→        <div className="relative w-24 h-24 sm:w-32 sm:h-32 rounded-xl overflow-hidden bg-muted shrink-0">
+   228→          <ProductImage src={product.images[0]} alt={product.name} className="w-full h-full" />
+   229→          <div className="absolute top-1.5 left-1.5 flex flex-col gap-1">
+   230→            {product.discount > 0 && (
+   231→              <span className="px-1.5 py-0.5 rounded-md bg-destructive text-destructive-foreground text-[10px] font-semibold">
+   232→                -{product.discount}%
+   233→              </span>
+   234→            )}
+   235→            {product.isNew && (
+   236→              <span className="px-1.5 py-0.5 rounded-md bg-emerald-500 text-white text-[10px] font-semibold">
+   237→                New
+   238→              </span>
+   239→            )}
+   240→          </div>
+   241→        </div>
+   242→
+   243→        {/* Info */}
+   244→        <div className="flex-1 min-w-0 py-1">
+   245→          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+   246→            <div className="min-w-0">
+   247→              <p className="text-xs text-muted-foreground mb-0.5">{product.brand}</p>
+   248→              <h3 className="font-medium text-sm sm:text-base leading-snug line-clamp-2 group-hover:text-violet-500 transition-colors">
+   249→                {product.name}
+   250→              </h3>
+   251→              <div className="flex items-center gap-2 mt-1.5">
+   252→                <Rating rating={product.rating} count={product.reviewCount} size="sm" />
+   253→              </div>
+   254→              <p className="text-xs text-muted-foreground mt-2 line-clamp-2 hidden sm:block">
+   255→                {product.shortDescription}
+   256→              </p>
+   257→            </div>
+   258→            <div className="flex flex-col items-end shrink-0">
+   259→              <div className="flex items-center gap-2">
+   260→                <span className="font-semibold text-lg">${product.price.toLocaleString()}</span>
+   261→                {product.discount > 0 && (
+   262→                  <span className="text-sm text-muted-foreground line-through">
+   263→                    ${product.originalPrice.toLocaleString()}
+   264→                  </span>
+   265→                )}
+   266→              </div>
+   267→              {product.discount > 0 && (
+   268→                <Badge variant="destructive" className="mt-1 text-[10px] px-1.5 py-0">
+   269→                  -{product.discount}%
+   270→                </Badge>
+   271→              )}
+   272→              <div className="flex gap-1.5 mt-2">
+   273→                {product.isNew && (
+   274→                  <Badge variant="outline" className="text-[10px] px-1.5 py-0 text-emerald-500 border-emerald-500/30">
+   275→                    New
+   276→                  </Badge>
+   277→                )}
+   278→                {product.bestSeller && (
+   279→                  <Badge variant="outline" className="text-[10px] px-1.5 py-0 text-amber-500 border-amber-500/30">
+   280→                    Best Seller
+   281→                  </Badge>
+   282→                )}
+   283→              </div>
+   284→            </div>
+   285→          </div>
+   286→        </div>
+   287→      </div>
+   288→    </motion.div>
+   289→  );
+   290→}
+   291→
+   292→/* ───────── Shop Page ───────── */
+   293→export function ShopPage() {
+   294→  const { params, navigate } = useRouterStore();
+   295→
+   296→  // Data from storage
+   297→  const products = typeof window !== 'undefined' ? getStoredProducts() : [];
+   298→  const categories = typeof window !== 'undefined' ? getStoredCategories() : [];
+   299→  const brands = typeof window !== 'undefined' ? getStoredBrands() : [];
+   300→
+   301→  // Filter state
+   302→  const [selectedCategories, setSelectedCategories] = useState<string[]>(
+   303→    params.category ? [params.category] : []
+   304→  );
+   305→  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+   306→  const [priceRange, setPriceRange] = useState<[number, number]>([0, 3000]);
+   307→  const [minRating, setMinRating] = useState<number>(0);
+   308→  const [sortBy, setSortBy] = useState<SortOption>('newest');
+   309→  const [viewMode, setViewMode] = useState<ViewMode>('grid');
+   310→  const [currentPage, setCurrentPage] = useState(1);
+   311→  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+   312→
+   313→  // Search query from router params
+   314→  const searchQuery = params.q?.toLowerCase() || '';
+   315→
+   316→  // Filtered & sorted products
+   317→  const filteredProducts = useMemo(() => {
+   318→    let result = [...products];
+   319→
+   320→    // Search filter
+   321→    if (searchQuery) {
+   322→      result = result.filter(
+   323→        (p) =>
+   324→          p.name.toLowerCase().includes(searchQuery) ||
+   325→          p.description.toLowerCase().includes(searchQuery) ||
+   326→          p.brand.toLowerCase().includes(searchQuery) ||
+   327→          p.category.toLowerCase().includes(searchQuery) ||
+   328→          p.tags.some((t) => t.toLowerCase().includes(searchQuery))
+   329→      );
+   330→    }
+   331→
+   332→    // Category filter
+   333→    if (selectedCategories.length > 0) {
+   334→      result = result.filter((p) => selectedCategories.includes(p.categorySlug));
+   335→    }
+   336→
+   337→    // Brand filter
+   338→    if (selectedBrands.length > 0) {
+   339→      result = result.filter((p) => selectedBrands.includes(p.brand));
+   340→    }
+   341→
+   342→    // Price range filter
+   343→    result = result.filter((p) => p.price >= priceRange[0] && p.price <= priceRange[1]);
+   344→
+   345→    // Rating filter
+   346→    if (minRating > 0) {
+   347→      result = result.filter((p) => p.rating >= minRating);
+   348→    }
+   349→
+   350→    // Sorting
+   351→    switch (sortBy) {
+   352→      case 'newest':
+   353→        result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+   354→        break;
+   355→      case 'price-asc':
+   356→        result.sort((a, b) => a.price - b.price);
+   357→        break;
+   358→      case 'price-desc':
+   359→        result.sort((a, b) => b.price - a.price);
+   360→        break;
+   361→      case 'rating':
+   362→        result.sort((a, b) => b.rating - a.rating);
+   363→        break;
+   364→      case 'name-asc':
+   365→        result.sort((a, b) => a.name.localeCompare(b.name));
+   366→        break;
+   367→    }
+   368→
+   369→    return result;
+   370→  }, [products, searchQuery, selectedCategories, selectedBrands, priceRange, minRating, sortBy]);
+   371→
+   372→  // Pagination
+   373→  const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
+   374→  const paginatedProducts = useMemo(() => {
+   375→    const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
+   376→    return filteredProducts.slice(start, start + PRODUCTS_PER_PAGE);
+   377→  }, [filteredProducts, currentPage]);
+   378→
+   379→  // Reset page when filters change
+   380→  const handleCategoryToggle = (slug: string) => {
+   381→    setSelectedCategories((prev) =>
+   382→      prev.includes(slug) ? prev.filter((c) => c !== slug) : [...prev, slug]
+   383→    );
+   384→    setCurrentPage(1);
+   385→  };
+   386→
+   387→  const handleBrandToggle = (name: string) => {
+   388→    setSelectedBrands((prev) =>
+   389→      prev.includes(name) ? prev.filter((b) => b !== name) : [...prev, name]
+   390→    );
+   391→    setCurrentPage(1);
+   392→  };
+   393→
+   394→  const handlePriceChange = (value: number[]) => {
+   395→    setPriceRange([value[0], value[1]]);
+   396→    setCurrentPage(1);
+   397→  };
+   398→
+   399→  const handleRatingFilter = (rating: number) => {
+   400→    setMinRating(minRating === rating ? 0 : rating);
+   401→    setCurrentPage(1);
+   402→  };
+   403→
+   404→  const clearAllFilters = () => {
+   405→    setSelectedCategories([]);
+   406→    setSelectedBrands([]);
+   407→    setPriceRange([0, 3000]);
+   408→    setMinRating(0);
+   409→    setCurrentPage(1);
+   410→  };
+   411→
+   412→  const hasActiveFilters =
+   413→    selectedCategories.length > 0 ||
+   414→    selectedBrands.length > 0 ||
+   415→    priceRange[0] > 0 ||
+   416→    priceRange[1] < 3000 ||
+   417→    minRating > 0;
+   418→
+   419→  // Active filter badges
+   420→  const activeFilterBadges = useMemo(() => {
+   421→    const badges: { label: string; onRemove: () => void }[] = [];
+   422→
+   423→    selectedCategories.forEach((slug) => {
+   424→      const cat = categories.find((c) => c.slug === slug);
+   425→      badges.push({
+   426→        label: cat?.name || slug,
+   427→        onRemove: () => handleCategoryToggle(slug),
+   428→      });
+   429→    });
+   430→
+   431→    selectedBrands.forEach((name) => {
+   432→      badges.push({
+   433→        label: name,
+   434→        onRemove: () => handleBrandToggle(name),
+   435→      });
+   436→    });
+   437→
+   438→    if (priceRange[0] > 0 || priceRange[1] < 3000) {
+   439→      badges.push({
+   440→        label: `$${priceRange[0]} - $${priceRange[1]}`,
+   441→        onRemove: () => {
+   442→          setPriceRange([0, 3000]);
+   443→          setCurrentPage(1);
+   444→        },
+   445→      });
+   446→    }
+   447→
+   448→    if (minRating > 0) {
+   449→      badges.push({
+   450→        label: `${minRating}+ Stars`,
+   451→        onRemove: () => {
+   452→          setMinRating(0);
+   453→          setCurrentPage(1);
+   454→        },
+   455→      });
+   456→    }
+   457→
+   458→    if (searchQuery) {
+   459→      badges.push({
+   460→        label: `Search: "${params.q}"`,
+   461→        onRemove: () => navigate('shop'),
+   462→      });
+   463→    }
+   464→
+   465→    return badges;
+   466→  }, [selectedCategories, selectedBrands, priceRange, minRating, searchQuery, categories, params.q, navigate]);
+   467→
+   468→  // Pagination range
+   469→  const getPaginationRange = () => {
+   470→    const range: (number | 'ellipsis')[] = [];
+   471→    if (totalPages <= 7) {
+   472→      for (let i = 1; i <= totalPages; i++) range.push(i);
+   473→    } else {
+   474→      range.push(1);
+   475→      if (currentPage > 3) range.push('ellipsis');
+   476→      const start = Math.max(2, currentPage - 1);
+   477→      const end = Math.min(totalPages - 1, currentPage + 1);
+   478→      for (let i = start; i <= end; i++) range.push(i);
+   479→      if (currentPage < totalPages - 2) range.push('ellipsis');
+   480→      range.push(totalPages);
+   481→    }
+   482→    return range;
+   483→  };
+   484→
+   485→  // Shared filter props
+   486→  const filterProps: FilterSidebarProps = {
+   487→    categories,
+   488→    brands,
+   489→    products,
+   490→    selectedCategories,
+   491→    selectedBrands,
+   492→    priceRange,
+   493→    minRating,
+   494→    hasActiveFilters,
+   495→    onCategoryToggle: handleCategoryToggle,
+   496→    onBrandToggle: handleBrandToggle,
+   497→    onPriceChange: handlePriceChange,
+   498→    onRatingFilter: handleRatingFilter,
+   499→    onClearAll: clearAllFilters,
+   500→  };
+   501→
+   502→  return (
+   503→    <div className="min-h-screen bg-background">
+   504→      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 lg:py-10">
+   505→        {/* ───── Breadcrumb ───── */}
+   506→        <motion.div
+   507→          initial={{ opacity: 0, y: -10 }}
+   508→          animate={{ opacity: 1, y: 0 }}
+   509→          transition={{ duration: 0.3 }}
+   510→          className="mb-6"
+   511→        >
+   512→          <Breadcrumb>
+   513→            <BreadcrumbList>
+   514→              <BreadcrumbItem>
+   515→                <BreadcrumbLink
+   516→                  className="cursor-pointer"
+   517→                  onClick={() => navigate('home')}
+   518→                >
+   519→                  Home
+   520→                </BreadcrumbLink>
+   521→              </BreadcrumbItem>
+   522→              <BreadcrumbSeparator />
+   523→              <BreadcrumbItem>
+   524→                <BreadcrumbPage>Shop</BreadcrumbPage>
+   525→              </BreadcrumbItem>
+   526→            </BreadcrumbList>
+   527→          </Breadcrumb>
+   528→        </motion.div>
+   529→
+   530→        {/* ───── Header ───── */}
+   531→        <motion.div
+   532→          initial={{ opacity: 0, y: -10 }}
+   533→          animate={{ opacity: 1, y: 0 }}
+   534→          transition={{ duration: 0.3, delay: 0.05 }}
+   535→          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6"
+   536→        >
+   537→          <div>
+   538→            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+   539→              {searchQuery ? `Search: "${params.q}"` : selectedCategories.length === 1 ? categories.find(c => c.slug === selectedCategories[0])?.name || 'All Products' : 'All Products'}
+   540→            </h1>
+   541→            <p className="text-sm text-muted-foreground mt-1">
+   542→              {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'} found
+   543→            </p>
+   544→          </div>
+   545→
+   546→          <div className="flex items-center gap-3">
+   547→            {/* Sort Dropdown */}
+   548→            <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
+   549→              <SelectTrigger className="w-[180px] rounded-xl">
+   550→                <SelectValue placeholder="Sort by" />
+   551→              </SelectTrigger>
+   552→              <SelectContent>
+   553→                <SelectItem value="newest">Newest</SelectItem>
+   554→                <SelectItem value="price-asc">Price: Low to High</SelectItem>
+   555→                <SelectItem value="price-desc">Price: High to Low</SelectItem>
+   556→                <SelectItem value="rating">Top Rated</SelectItem>
+   557→                <SelectItem value="name-asc">Name: A to Z</SelectItem>
+   558→              </SelectContent>
+   559→            </Select>
+   560→
+   561→            {/* View Toggle */}
+   562→            <div className="hidden sm:flex items-center border rounded-xl overflow-hidden">
+   563→              <Button
+   564→                variant={viewMode === 'grid' ? 'secondary' : 'ghost'}
+   565→                size="icon"
+   566→                className="rounded-none h-9 w-9"
+   567→                onClick={() => setViewMode('grid')}
+   568→                aria-label="Grid view"
+   569→              >
+   570→                <Grid3X3 className="h-4 w-4" />
+   571→              </Button>
+   572→              <Button
+   573→                variant={viewMode === 'list' ? 'secondary' : 'ghost'}
+   574→                size="icon"
+   575→                className="rounded-none h-9 w-9"
+   576→                onClick={() => setViewMode('list')}
+   577→                aria-label="List view"
+   578→              >
+   579→                <LayoutList className="h-4 w-4" />
+   580→              </Button>
+   581→            </div>
+   582→
+   583→            {/* Mobile Filter Button */}
+   584→            <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
+   585→              <SheetTrigger asChild>
+   586→                <Button
+   587→                  variant="outline"
+   588→                  size="sm"
+   589→                  className="lg:hidden rounded-xl relative"
+   590→                >
+   591→                  <SlidersHorizontal className="h-4 w-4 mr-1.5" />
+   592→                  Filters
+   593→                  {hasActiveFilters && (
+   594→                    <span className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-primary text-[10px] font-bold text-primary-foreground flex items-center justify-center">
+   595→                      {activeFilterBadges.length}
+   596→                    </span>
+   597→                  )}
+   598→                </Button>
+   599→              </SheetTrigger>
+   600→              <SheetContent side="left" className="w-80 overflow-y-auto">
+   601→                <SheetHeader className="mb-4">
+   602→                  <SheetTitle className="flex items-center gap-2">
+   603→                    <SlidersHorizontal className="h-5 w-5" />
+   604→                    Filters
+   605→                  </SheetTitle>
+   606→                </SheetHeader>
+   607→                <FilterSidebar {...filterProps} />
+   608→              </SheetContent>
+   609→            </Sheet>
+   610→          </div>
+   611→        </motion.div>
+   612→
+   613→        {/* ───── Active Filter Badges ───── */}
+   614→        <AnimatePresence>
+   615→          {activeFilterBadges.length > 0 && (
+   616→            <motion.div
+   617→              initial={{ opacity: 0, height: 0 }}
+   618→              animate={{ opacity: 1, height: 'auto' }}
+   619→              exit={{ opacity: 0, height: 0 }}
+   620→              transition={{ duration: 0.2 }}
+   621→              className="flex flex-wrap items-center gap-2 mb-6"
+   622→            >
+   623→              <span className="text-sm text-muted-foreground mr-1">Active Filters:</span>
+   624→              {activeFilterBadges.map((badge, i) => (
+   625→                <motion.div
+   626→                  key={`${badge.label}-${i}`}
+   627→                  initial={{ opacity: 0, scale: 0.8 }}
+   628→                  animate={{ opacity: 1, scale: 1 }}
+   629→                  exit={{ opacity: 0, scale: 0.8 }}
+   630→                  transition={{ duration: 0.15 }}
+   631→                >
+   632→                  <Badge
+   633→                    variant="secondary"
+   634→                    className="rounded-lg pl-2.5 pr-1.5 py-1 text-xs font-medium gap-1.5 cursor-pointer hover:bg-secondary/80 transition-colors"
+   635→                    onClick={badge.onRemove}
+   636→                  >
+   637→                    {badge.label}
+   638→                    <X className="h-3 w-3 opacity-60 hover:opacity-100 transition-opacity" />
+   639→                  </Badge>
+   640→                </motion.div>
+   641→              ))}
+   642→              <Button
+   643→                variant="ghost"
+   644→                size="sm"
+   645→                onClick={clearAllFilters}
+   646→                className="text-xs text-muted-foreground hover:text-destructive h-7 px-2"
+   647→              >
+   648→                Clear all
+   649→              </Button>
+   650→            </motion.div>
+   651→          )}
+   652→        </AnimatePresence>
+   653→
+   654→        {/* ───── Main Content ───── */}
+   655→        <div className="flex gap-8">
+   656→          {/* Desktop Sidebar */}
+   657→          <motion.aside
+   658→            initial={{ opacity: 0, x: -20 }}
+   659→            animate={{ opacity: 1, x: 0 }}
+   660→            transition={{ duration: 0.3, delay: 0.1 }}
+   661→            className="hidden lg:block w-64 shrink-0"
+   662→          >
+   663→            <div className="sticky top-24 rounded-2xl border bg-card p-5">
+   664→              <h3 className="font-semibold text-sm flex items-center gap-2 mb-4">
+   665→                <SlidersHorizontal className="h-4 w-4" />
+   666→                Filters
+   667→              </h3>
+   668→              <FilterSidebar {...filterProps} />
+   669→            </div>
+   670→          </motion.aside>
+   671→
+   672→          {/* Product Area */}
+   673→          <main className="flex-1 min-w-0">
+   674→            {paginatedProducts.length > 0 ? (
+   675→              <>
+   676→                {viewMode === 'grid' ? (
+   677→                  <ProductGrid products={paginatedProducts} columns={3} />
+   678→                ) : (
+   679→                  <div className="space-y-4">
+   680→                    {paginatedProducts.map((product, index) => (
+   681→                      <ProductListItem key={product.id} product={product} index={index} />
+   682→                    ))}
+   683→                  </div>
+   684→                )}
+   685→
+   686→                {/* ───── Pagination ───── */}
+   687→                {totalPages > 1 && (
+   688→                  <motion.div
+   689→                    initial={{ opacity: 0 }}
+   690→                    animate={{ opacity: 1 }}
+   691→                    transition={{ delay: 0.3 }}
+   692→                    className="mt-10"
+   693→                  >
+   694→                    <PaginationNav>
+   695→                      <PaginationContent>
+   696→                        <PaginationItem>
+   697→                          <PaginationPrevious
+   698→                            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+   699→                            className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+   700→                          />
+   701→                        </PaginationItem>
+   702→
+   703→                        {getPaginationRange().map((page, i) =>
+   704→                          page === 'ellipsis' ? (
+   705→                            <PaginationItem key={`ellipsis-${i}`}>
+   706→                              <PaginationEllipsis />
+   707→                            </PaginationItem>
+   708→                          ) : (
+   709→                            <PaginationItem key={page}>
+   710→                              <PaginationLink
+   711→                                isActive={currentPage === page}
+   712→                                onClick={() => setCurrentPage(page)}
+   713→                                className="cursor-pointer"
+   714→                              >
+   715→                                {page}
+   716→                              </PaginationLink>
+   717→                            </PaginationItem>
+   718→                          )
+   719→                        )}
+   720→
+   721→                        <PaginationItem>
+   722→                          <PaginationNext
+   723→                            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+   724→                            className={currentPage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+   725→                          />
+   726→                        </PaginationItem>
+   727→                      </PaginationContent>
+   728→                    </PaginationNav>
+   729→                  </motion.div>
+   730→                )}
+   731→              </>
+   732→            ) : (
+   733→              <EmptyState
+   734→                icon={SlidersHorizontal}
+   735→                title="No products found"
+   736→                description="Try adjusting your filters or search query to find what you're looking for."
+   737→                action={{
+   738→                  label: 'Clear All Filters',
+   739→                  onClick: clearAllFilters,
+   740→                }}
+   741→              />
+   742→            )}
+   743→          </main>
+   744→        </div>
+   745→      </div>
+   746→    </div>
+   747→  );
+   748→}
+   749→

@@ -126,36 +126,36 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
             )}
           </div>
 
-          {/* Quick Actions */}
-          <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0">
+          {/* Quick Actions - always visible on mobile, hover on desktop */}
+          <div className="absolute top-3 right-3 flex flex-col gap-2 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-300 sm:translate-x-2 sm:group-hover:translate-x-0">
             <button
               onClick={handleWishlist}
-              className={`h-9 w-9 rounded-xl flex items-center justify-center backdrop-blur-sm transition-all ${
+              className={`h-8 w-8 sm:h-9 sm:w-9 rounded-xl flex items-center justify-center backdrop-blur-sm transition-all ${
                 inWishlist
                   ? 'bg-destructive text-destructive-foreground'
                   : 'bg-background/80 text-foreground hover:bg-background'
               }`}
               aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
             >
-              <Heart className={`h-4 w-4 ${inWishlist ? 'fill-current' : ''}`} />
+              <Heart className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${inWishlist ? 'fill-current' : ''}`} />
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); navigate('product', { id: product.id }); }}
-              className="h-9 w-9 rounded-xl bg-background/80 text-foreground hover:bg-background flex items-center justify-center backdrop-blur-sm transition-all"
+              className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-background/80 text-foreground hover:bg-background flex items-center justify-center backdrop-blur-sm transition-all"
               aria-label="Quick view"
             >
-              <Eye className="h-4 w-4" />
+              <Eye className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </button>
           </div>
 
-          {/* Add to Cart */}
-          <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+          {/* Add to Cart - always visible on mobile, hover on desktop */}
+          <div className="absolute bottom-2 left-2 right-2 sm:bottom-3 sm:left-3 sm:right-3 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-300 sm:translate-y-2 sm:group-hover:translate-y-0">
             <Button
               onClick={handleAddToCart}
-              className="w-full rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600 shadow-lg"
+              className="w-full rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600 shadow-lg h-9 sm:h-auto text-xs sm:text-sm"
               size="sm"
             >
-              <ShoppingBag className="h-4 w-4 mr-2" /> Add to Cart
+              <ShoppingBag className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5 sm:mr-2" /> Add to Cart
             </Button>
           </div>
         </div>

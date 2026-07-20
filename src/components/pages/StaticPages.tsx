@@ -500,7 +500,7 @@ export function AboutPage() {
         >
           Our Values
         </motion.h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
           {values.map((value) => (
             <motion.div key={value.title} variants={staggerItem}>
               <Card className="rounded-2xl border-border/50 shadow-sm h-full hover:shadow-md transition-shadow">
@@ -527,7 +527,7 @@ export function AboutPage() {
         className="mb-12"
       >
         <h2 className="text-2xl font-bold mb-6 text-center">Meet Our Team</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
           {team.map((member, index) => (
             <motion.div
               key={member.name}

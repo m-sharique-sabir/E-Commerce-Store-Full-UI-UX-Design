@@ -414,21 +414,21 @@ export function ProductDetailPage() {
             </div>
 
             {/* Features Bar */}
-            <div className="grid grid-cols-3 gap-3">
-              <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-muted/50 border border-border/50 text-center">
-                <Truck className="h-5 w-5 text-violet-500" />
-                <span className="text-xs font-medium">Free Shipping</span>
-                <span className="text-[10px] text-muted-foreground">Orders $100+</span>
+            <div className="grid grid-cols-3 gap-2 sm:gap-3">
+              <div className="flex flex-col items-center gap-1.5 sm:gap-2 p-2.5 sm:p-4 rounded-xl bg-muted/50 border border-border/50 text-center">
+                <Truck className="h-4 w-4 sm:h-5 sm:w-5 text-violet-500" />
+                <span className="text-[10px] sm:text-xs font-medium">Free Shipping</span>
+                <span className="text-[9px] sm:text-[10px] text-muted-foreground">Orders $100+</span>
               </div>
-              <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-muted/50 border border-border/50 text-center">
-                <Shield className="h-5 w-5 text-violet-500" />
-                <span className="text-xs font-medium">2-Year Warranty</span>
-                <span className="text-[10px] text-muted-foreground">Full coverage</span>
+              <div className="flex flex-col items-center gap-1.5 sm:gap-2 p-2.5 sm:p-4 rounded-xl bg-muted/50 border border-border/50 text-center">
+                <Shield className="h-4 w-4 sm:h-5 sm:w-5 text-violet-500" />
+                <span className="text-[10px] sm:text-xs font-medium">2-Year Warranty</span>
+                <span className="text-[9px] sm:text-[10px] text-muted-foreground">Full coverage</span>
               </div>
-              <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-muted/50 border border-border/50 text-center">
-                <RotateCcw className="h-5 w-5 text-violet-500" />
-                <span className="text-xs font-medium">Free Returns</span>
-                <span className="text-[10px] text-muted-foreground">30-day policy</span>
+              <div className="flex flex-col items-center gap-1.5 sm:gap-2 p-2.5 sm:p-4 rounded-xl bg-muted/50 border border-border/50 text-center">
+                <RotateCcw className="h-4 w-4 sm:h-5 sm:w-5 text-violet-500" />
+                <span className="text-[10px] sm:text-xs font-medium">Free Returns</span>
+                <span className="text-[9px] sm:text-[10px] text-muted-foreground">30-day policy</span>
               </div>
             </div>
           </motion.div>
@@ -443,13 +443,13 @@ export function ProductDetailPage() {
         >
           <Tabs defaultValue="description" className="w-full">
             <TabsList className="w-full sm:w-auto justify-start rounded-xl p-1 bg-muted/60">
-              <TabsTrigger value="description" className="rounded-lg px-5">
+              <TabsTrigger value="description" className="rounded-lg px-3 sm:px-5 text-xs sm:text-sm">
                 Description
               </TabsTrigger>
-              <TabsTrigger value="specifications" className="rounded-lg px-5">
-                Specifications
+              <TabsTrigger value="specifications" className="rounded-lg px-3 sm:px-5 text-xs sm:text-sm">
+                Specs
               </TabsTrigger>
-              <TabsTrigger value="reviews" className="rounded-lg px-5">
+              <TabsTrigger value="reviews" className="rounded-lg px-3 sm:px-5 text-xs sm:text-sm">
                 Reviews ({reviews.length})
               </TabsTrigger>
             </TabsList>
@@ -474,12 +474,12 @@ export function ProductDetailPage() {
                   {Object.entries(product.specifications).map(([key, value], idx) => (
                     <div
                       key={key}
-                      className={`flex items-center px-6 sm:px-8 py-4 ${
+                      className={`flex flex-col sm:flex-row sm:items-center px-4 sm:px-6 lg:px-8 py-3 sm:py-4 gap-1 sm:gap-0 ${
                         idx % 2 === 0 ? 'bg-muted/30' : ''
                       }`}
                     >
-                      <span className="w-1/3 text-sm font-medium text-foreground">{key}</span>
-                      <span className="w-2/3 text-sm text-muted-foreground">{value}</span>
+                      <span className="text-xs sm:text-sm font-medium text-foreground sm:w-1/3">{key}</span>
+                      <span className="text-xs sm:text-sm text-muted-foreground sm:w-2/3">{value}</span>
                     </div>
                   ))}
                 </div>

@@ -1071,34 +1071,63 @@ export function OrderDetailsPage() {
                   </div>
                 </div>
               ) : (
-                <div className="flex items-center justify-between relative">
-                  {/* Connecting Line */}
-                  <div className="absolute top-5 left-0 right-0 h-0.5 bg-muted mx-10 hidden sm:block" />
-                  <div
-                    className="absolute top-5 left-0 h-0.5 bg-gradient-to-r from-violet-500 to-fuchsia-500 hidden sm:block transition-all"
-                    style={{ width: `${(currentStepIndex / (statusSteps.length - 1)) * 100}%`, marginLeft: '2.5rem' }}
-                  />
-
-                  {statusSteps.map((step, idx) => {
-                    const isCompleted = idx <= currentStepIndex;
-                    const isCurrent = idx === currentStepIndex;
-                    return (
-                      <div key={step.key} className="flex flex-col items-center relative z-10 flex-1">
-                        <div
-                          className={`flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all ${
-                            isCompleted
-                              ? 'bg-gradient-to-br from-violet-500 to-fuchsia-500 border-violet-500 text-white shadow-lg shadow-violet-500/25'
-                              : 'bg-background border-muted text-muted-foreground'
-                          } ${isCurrent ? 'scale-110' : ''}`}
-                        >
-                          <step.icon className="h-4 w-4" />
+                <div>
+                  {/* Mobile: Vertical Timeline */}
+                  <div className="sm:hidden space-y-3">
+                    {statusSteps.map((step, idx) => {
+                      const isCompleted = idx <= currentStepIndex;
+                      const isCurrent = idx === currentStepIndex;
+                      return (
+                        <div key={step.key} className="flex items-center gap-3">
+                          <div
+                            className={`flex h-8 w-8 items-center justify-center rounded-full border-2 transition-all shrink-0 ${
+                              isCompleted
+                                ? 'bg-gradient-to-br from-violet-500 to-fuchsia-500 border-violet-500 text-white shadow-lg shadow-violet-500/25'
+                                : 'bg-background border-muted text-muted-foreground'
+                            } ${isCurrent ? 'scale-110' : ''}`}
+                          >
+                            <step.icon className="h-3.5 w-3.5" />
+                          </div>
+                          <p className={`text-sm font-medium ${isCompleted ? 'text-foreground' : 'text-muted-foreground'}`}>
+                            {step.label}
+                          </p>
+                          {isCurrent && (
+                            <span className="ml-auto text-xs text-violet-500 font-medium">Current</span>
+                          )}
                         </div>
-                        <p className={`text-xs mt-2 font-medium ${isCompleted ? 'text-foreground' : 'text-muted-foreground'}`}>
-                          {step.label}
-                        </p>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
+                  {/* Desktop: Horizontal Timeline */}
+                  <div className="hidden sm:flex items-center justify-between relative">
+                    {/* Connecting Line */}
+                    <div className="absolute top-5 left-0 right-0 h-0.5 bg-muted mx-10" />
+                    <div
+                      className="absolute top-5 left-0 h-0.5 bg-gradient-to-r from-violet-500 to-fuchsia-500 transition-all"
+                      style={{ width: `${(currentStepIndex / (statusSteps.length - 1)) * 100}%`, marginLeft: '2.5rem' }}
+                    />
+
+                    {statusSteps.map((step, idx) => {
+                      const isCompleted = idx <= currentStepIndex;
+                      const isCurrent = idx === currentStepIndex;
+                      return (
+                        <div key={step.key} className="flex flex-col items-center relative z-10 flex-1">
+                          <div
+                            className={`flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all ${
+                              isCompleted
+                                ? 'bg-gradient-to-br from-violet-500 to-fuchsia-500 border-violet-500 text-white shadow-lg shadow-violet-500/25'
+                                : 'bg-background border-muted text-muted-foreground'
+                            } ${isCurrent ? 'scale-110' : ''}`}
+                          >
+                            <step.icon className="h-4 w-4" />
+                          </div>
+                          <p className={`text-xs mt-2 font-medium ${isCompleted ? 'text-foreground' : 'text-muted-foreground'}`}>
+                            {step.label}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               )}
             </CardContent>

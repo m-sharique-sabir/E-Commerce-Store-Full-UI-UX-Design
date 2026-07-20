@@ -1,0 +1,960 @@
+     1→'use client';
+     2→
+     3→import React, { useState, useEffect, useRef } from 'react';
+     4→import { motion } from 'framer-motion';
+     5→import {
+     6→  Search,
+     7→  MapPin,
+     8→  Phone,
+     9→  Mail,
+    10→  ChevronDown,
+    11→  ChevronUp,
+    12→  MessageSquare,
+    13→  Clock,
+    14→  Users,
+    15→  Award,
+    16→  Globe,
+    17→  Heart,
+    18→  HelpCircle,
+    19→  Home,
+    20→} from 'lucide-react';
+    21→import { useRouterStore, useSearchStore } from '@/stores';
+    22→import {
+    23→  getStoredCategories,
+    24→  getStoredProducts,
+    25→  getSearchHistory,
+    26→  clearSearchHistory,
+    27→} from '@/lib/storage';
+    28→import {
+    29→  ProductCard,
+    30→  ProductGrid,
+    31→  Rating,
+    32→  EmptyState,
+    33→  ProductImage,
+    34→} from '@/components/shared';
+    35→import { Button } from '@/components/ui/button';
+    36→import { Input } from '@/components/ui/input';
+    37→import {
+    38→  Accordion,
+    39→  AccordionItem,
+    40→  AccordionTrigger,
+    41→  AccordionContent,
+    42→} from '@/components/ui/accordion';
+    43→import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+    44→import { Separator } from '@/components/ui/separator';
+    45→import { Product, Category } from '@/lib/types';
+    46→import { toast } from 'sonner';
+    47→
+    48→// ─── Animation Variants ──────────────────────────────────────────────────────
+    49→
+    50→const fadeInUp = {
+    51→  initial: { opacity: 0, y: 30 },
+    52→  animate: { opacity: 1, y: 0 },
+    53→  transition: { duration: 0.6, ease: 'easeOut' },
+    54→};
+    55→
+    56→const staggerContainer = {
+    57→  animate: {
+    58→    transition: {
+    59→      staggerChildren: 0.08,
+    60→    },
+    61→  },
+    62→};
+    63→
+    64→const staggerItem = {
+    65→  initial: { opacity: 0, y: 20 },
+    66→  animate: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
+    67→};
+    68→
+    69→// ─── CategoriesPage ──────────────────────────────────────────────────────────
+    70→
+    71→export function CategoriesPage() {
+    72→  const navigate = useRouterStore((s) => s.navigate);
+    73→  const [categories, setCategories] = useState<Category[]>(() => {
+    74→    if (typeof window !== 'undefined') return getStoredCategories();
+    75→    return [];
+    76→  });
+    77→
+    78→  return (
+    79→    <div className="min-h-screen pb-12">
+    80→      {/* Header */}
+    81→      <motion.div
+    82→        initial={{ opacity: 0, y: 20 }}
+    83→        animate={{ opacity: 1, y: 0 }}
+    84→        transition={{ duration: 0.5 }}
+    85→        className="mb-8"
+    86→      >
+    87→        <h1 className="text-3xl font-bold tracking-tight">Browse Categories</h1>
+    88→        <p className="text-muted-foreground mt-2">
+    89→          Explore our wide range of product categories
+    90→        </p>
+    91→      </motion.div>
+    92→
+    93→      {/* Categories Grid */}
+    94→      <motion.div
+    95→        variants={staggerContainer}
+    96→        initial="initial"
+    97→        animate="animate"
+    98→        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6"
+    99→      >
+   100→        {categories.map((category, index) => (
+   101→          <motion.div
+   102→            key={category.id}
+   103→            variants={staggerItem}
+   104→            whileHover={{ scale: 1.03 }}
+   105→            whileTap={{ scale: 0.98 }}
+   106→            className="cursor-pointer"
+   107→            onClick={() => navigate('shop', { category: category.slug })}
+   108→          >
+   109→            <div className="rounded-2xl overflow-hidden bg-card border border-border/50 hover:border-border hover:shadow-lg transition-all duration-300">
+   110→              {/* Category Image */}
+   111→              <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+   112→                <ProductImage
+   113→                  src={category.image}
+   114→                  alt={category.name}
+   115→                  className="w-full h-full"
+   116→                />
+   117→                {/* Product Count Badge */}
+   118→                <div className="absolute top-3 right-3 px-2.5 py-1 rounded-xl bg-background/80 backdrop-blur-sm text-xs font-semibold">
+   119→                  {category.productCount} items
+   120→                </div>
+   121→              </div>
+   122→
+   123→              {/* Category Info */}
+   124→              <div className="p-4">
+   125→                <h3 className="font-semibold text-base mb-1 group-hover:text-violet-500 transition-colors">
+   126→                  {category.name}
+   127→                </h3>
+   128→                <p className="text-sm text-muted-foreground line-clamp-2">
+   129→                  {category.description}
+   130→                </p>
+   131→              </div>
+   132→            </div>
+   133→          </motion.div>
+   134→        ))}
+   135→      </motion.div>
+   136→
+   137→      {categories.length === 0 && (
+   138→        <EmptyState
+   139→          icon={HelpCircle}
+   140→          title="No categories found"
+   141→          description="Categories will appear here once available."
+   142→        />
+   143→      )}
+   144→    </div>
+   145→  );
+   146→}
+   147→
+   148→// ─── SearchPage ──────────────────────────────────────────────────────────────
+   149→
+   150→export function SearchPage() {
+   151→  const { params, navigate } = useRouterStore();
+   152→  const { addToHistory } = useSearchStore();
+   153→  const initialHistory = typeof window !== 'undefined' ? getSearchHistory() : [];
+   154→  const [query, setQuery] = useState(params.q || '');
+   155→  const [searchHistory, setSearchHistory] = useState<{ query: string; searchedAt: string }[]>(initialHistory);
+   156→  const [suggestions, setSuggestions] = useState<Product[]>([]);
+   157→  const [showSuggestions, setShowSuggestions] = useState(false);
+   158→  const [results, setResults] = useState<Product[]>(() => {
+   159→    if (typeof window !== 'undefined' && params.q) {
+   160→      const products = getStoredProducts();
+   161→      const q = params.q.toLowerCase().trim();
+   162→      return products.filter(
+   163→        (p) =>
+   164→          p.name.toLowerCase().includes(q) ||
+   165→          p.description.toLowerCase().includes(q) ||
+   166→          p.brand.toLowerCase().includes(q) ||
+   167→          p.tags.some((t) => t.toLowerCase().includes(q)) ||
+   168→          p.category.toLowerCase().includes(q)
+   169→      );
+   170→    }
+   171→    return [];
+   172→  });
+   173→  const [hasSearched, setHasSearched] = useState(() => !!params.q);
+   174→  const inputRef = useRef<HTMLInputElement>(null);
+   175→  const suggestionsRef = useRef<HTMLDivElement>(null);
+   176→
+   177→  const performSearch = React.useCallback((searchQuery: string) => {
+   178→    const products = getStoredProducts();
+   179→    const q = searchQuery.toLowerCase().trim();
+   180→    if (!q) {
+   181→      setResults([]);
+   182→      setHasSearched(false);
+   183→      return;
+   184→    }
+   185→    const filtered = products.filter(
+   186→      (p) =>
+   187→        p.name.toLowerCase().includes(q) ||
+   188→        p.description.toLowerCase().includes(q) ||
+   189→        p.brand.toLowerCase().includes(q) ||
+   190→        p.tags.some((t) => t.toLowerCase().includes(q)) ||
+   191→        p.category.toLowerCase().includes(q)
+   192→    );
+   193→    setResults(filtered);
+   194→    setHasSearched(true);
+   195→  }, []);
+   196→
+   197→  // Auto-focus search input
+   198→  useEffect(() => {
+   199→    setTimeout(() => inputRef.current?.focus(), 100);
+   200→  }, []);
+   201→
+   202→  useEffect(() => {
+   203→    const handleClickOutside = (e: MouseEvent) => {
+   204→      if (suggestionsRef.current && !suggestionsRef.current.contains(e.target as Node)) {
+   205→        setShowSuggestions(false);
+   206→      }
+   207→    };
+   208→    document.addEventListener('mousedown', handleClickOutside);
+   209→    return () => document.removeEventListener('mousedown', handleClickOutside);
+   210→  }, []);
+   211→
+   212→  const handleInputChange = (value: string) => {
+   213→    setQuery(value);
+   214→    if (value.trim().length > 0) {
+   215→      const products = getStoredProducts();
+   216→      const q = value.toLowerCase().trim();
+   217→      const matches = products
+   218→        .filter((p) => p.name.toLowerCase().includes(q))
+   219→        .slice(0, 5);
+   220→      setSuggestions(matches);
+   221→      setShowSuggestions(matches.length > 0);
+   222→    } else {
+   223→      setSuggestions([]);
+   224→      setShowSuggestions(false);
+   225→      setResults([]);
+   226→      setHasSearched(false);
+   227→    }
+   228→  };
+   229→
+   230→  const handleSearch = (searchQuery?: string) => {
+   231→    const q = (searchQuery || query).trim();
+   232→    if (!q) return;
+   233→    setQuery(q);
+   234→    addToHistory(q);
+   235→    performSearch(q);
+   236→    setShowSuggestions(false);
+   237→    setSearchHistory(getSearchHistory());
+   238→  };
+   239→
+   240→  const handleKeyDown = (e: React.KeyboardEvent) => {
+   241→    if (e.key === 'Enter') {
+   242→      handleSearch();
+   243→    }
+   244→  };
+   245→
+   246→  const handleClearHistory = () => {
+   247→    clearSearchHistory();
+   248→    setSearchHistory([]);
+   249→  };
+   250→
+   251→  const handleSuggestionClick = (product: Product) => {
+   252→    navigate('product', { id: product.id });
+   253→  };
+   254→
+   255→  return (
+   256→    <div className="min-h-screen pb-12">
+   257→      {/* Search Header */}
+   258→      <motion.div
+   259→        initial={{ opacity: 0, y: 20 }}
+   260→        animate={{ opacity: 1, y: 0 }}
+   261→        transition={{ duration: 0.5 }}
+   262→        className="mb-8"
+   263→      >
+   264→        <h1 className="text-3xl font-bold tracking-tight mb-6">Search</h1>
+   265→
+   266→        {/* Search Input */}
+   267→        <div className="relative" ref={suggestionsRef}>
+   268→          <div className="relative">
+   269→            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+   270→            <Input
+   271→              ref={inputRef}
+   272→              type="text"
+   273→              placeholder="Search products, brands, categories..."
+   274→              value={query}
+   275→              onChange={(e) => handleInputChange(e.target.value)}
+   276→              onKeyDown={handleKeyDown}
+   277→              onFocus={() => {
+   278→                if (suggestions.length > 0) setShowSuggestions(true);
+   279→              }}
+   280→              className="pl-12 h-14 text-lg rounded-2xl border-border/50 focus-visible:border-violet-400 focus-visible:ring-violet-400/20 shadow-sm"
+   281→            />
+   282→            <Button
+   283→              onClick={() => handleSearch()}
+   284→              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600"
+   285→            >
+   286→              Search
+   287→            </Button>
+   288→          </div>
+   289→
+   290→          {/* Suggestions Dropdown */}
+   291→          {showSuggestions && (
+   292→            <motion.div
+   293→              initial={{ opacity: 0, y: -4 }}
+   294→              animate={{ opacity: 1, y: 0 }}
+   295→              className="absolute top-full left-0 right-0 mt-2 bg-popover border border-border rounded-2xl shadow-xl z-50 overflow-hidden"
+   296→            >
+   297→              {suggestions.map((product) => (
+   298→                <button
+   299→                  key={product.id}
+   300→                  onClick={() => handleSuggestionClick(product)}
+   301→                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-muted/50 transition-colors text-left"
+   302→                >
+   303→                  <div className="h-10 w-10 rounded-lg overflow-hidden bg-muted flex-shrink-0">
+   304→                    <ProductImage src={product.images[0]} alt={product.name} className="w-full h-full" />
+   305→                  </div>
+   306→                  <div className="flex-1 min-w-0">
+   307→                    <p className="text-sm font-medium truncate">{product.name}</p>
+   308→                    <p className="text-xs text-muted-foreground">{product.brand}</p>
+   309→                  </div>
+   310→                  <span className="text-sm font-semibold">${product.price.toLocaleString()}</span>
+   311→                </button>
+   312→              ))}
+   313→            </motion.div>
+   314→          )}
+   315→        </div>
+   316→      </motion.div>
+   317→
+   318→      {/* Search History */}
+   319→      {!hasSearched && searchHistory.length > 0 && (
+   320→        <motion.div
+   321→          initial={{ opacity: 0, y: 20 }}
+   322→          animate={{ opacity: 1, y: 0 }}
+   323→          transition={{ duration: 0.5, delay: 0.1 }}
+   324→          className="mb-8"
+   325→        >
+   326→          <div className="flex items-center justify-between mb-3">
+   327→            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+   328→              Recent Searches
+   329→            </h2>
+   330→            <Button
+   331→              variant="ghost"
+   332→              size="sm"
+   333→              onClick={handleClearHistory}
+   334→              className="text-xs text-muted-foreground hover:text-foreground"
+   335→            >
+   336→              Clear History
+   337→            </Button>
+   338→          </div>
+   339→          <div className="flex flex-wrap gap-2">
+   340→            {searchHistory.map((item, idx) => (
+   341→              <button
+   342→                key={idx}
+   343→                onClick={() => {
+   344→                  setQuery(item.query);
+   345→                  handleSearch(item.query);
+   346→                }}
+   347→                className="px-4 py-2 rounded-xl bg-muted/60 hover:bg-muted text-sm font-medium transition-colors"
+   348→              >
+   349→                {item.query}
+   350→              </button>
+   351→            ))}
+   352→          </div>
+   353→        </motion.div>
+   354→      )}
+   355→
+   356→      {/* Search Results */}
+   357→      {hasSearched && results.length > 0 && (
+   358→        <motion.div
+   359→          initial={{ opacity: 0, y: 20 }}
+   360→          animate={{ opacity: 1, y: 0 }}
+   361→          transition={{ duration: 0.5, delay: 0.1 }}
+   362→        >
+   363→          <div className="flex items-center justify-between mb-4">
+   364→            <p className="text-sm text-muted-foreground">
+   365→              Found <span className="font-semibold text-foreground">{results.length}</span>{' '}
+   366→              result{results.length !== 1 ? 's' : ''} for &ldquo;{query}&rdquo;
+   367→            </p>
+   368→          </div>
+   369→          <ProductGrid products={results} columns={4} />
+   370→        </motion.div>
+   371→      )}
+   372→
+   373→      {/* No Results */}
+   374→      {hasSearched && results.length === 0 && (
+   375→        <motion.div
+   376→          initial={{ opacity: 0, y: 20 }}
+   377→          animate={{ opacity: 1, y: 0 }}
+   378→          transition={{ duration: 0.5, delay: 0.1 }}
+   379→        >
+   380→          <EmptyState
+   381→            icon={Search}
+   382→            title="No products found"
+   383→            description={`We couldn't find any products matching "${query}". Try different keywords or browse our categories.`}
+   384→            action={{
+   385→              label: 'Browse Categories',
+   386→              onClick: () => navigate('categories'),
+   387→            }}
+   388→          />
+   389→        </motion.div>
+   390→      )}
+   391→    </div>
+   392→  );
+   393→}
+   394→
+   395→// ─── AboutPage ───────────────────────────────────────────────────────────────
+   396→
+   397→export function AboutPage() {
+   398→  const navigate = useRouterStore((s) => s.navigate);
+   399→
+   400→  const values = [
+   401→    {
+   402→      icon: Award,
+   403→      title: 'Quality',
+   404→      description:
+   405→        'We handpick every product to ensure it meets the highest standards of quality and craftsmanship.',
+   406→    },
+   407→    {
+   408→      icon: Globe,
+   409→      title: 'Innovation',
+   410→      description:
+   411→        'We stay ahead of trends, constantly sourcing the latest and most innovative products from around the world.',
+   412→    },
+   413→    {
+   414→      icon: Heart,
+   415→      title: 'Customer First',
+   416→      description:
+   417→        'Our customers are at the heart of everything we do. We strive to exceed expectations with every interaction.',
+   418→    },
+   419→  ];
+   420→
+   421→  const team = [
+   422→    { name: 'Sarah Chen', role: 'CEO & Founder', color: 'from-violet-400 to-fuchsia-400' },
+   423→    { name: 'James Miller', role: 'Head of Product', color: 'from-emerald-400 to-teal-400' },
+   424→    { name: 'Aisha Patel', role: 'Creative Director', color: 'from-amber-400 to-orange-400' },
+   425→  ];
+   426→
+   427→  const stats = [
+   428→    { label: 'Products', value: '100+', icon: Award },
+   429→    { label: 'Customers', value: '50K+', icon: Users },
+   430→    { label: 'Satisfaction', value: '99%', icon: Heart },
+   431→    { label: 'Support', value: '24/7', icon: Clock },
+   432→  ];
+   433→
+   434→  return (
+   435→    <div className="min-h-screen pb-12">
+   436→      {/* Hero Section */}
+   437→      <motion.div
+   438→        initial={{ opacity: 0, y: 30 }}
+   439→        animate={{ opacity: 1, y: 0 }}
+   440→        transition={{ duration: 0.7 }}
+   441→        className="relative rounded-3xl overflow-hidden mb-12"
+   442→      >
+   443→        <div className="bg-gradient-to-br from-violet-500 via-fuchsia-500 to-pink-500 px-8 py-16 sm:px-16 sm:py-24 text-center text-white">
+   444→          <motion.h1
+   445→            initial={{ opacity: 0, scale: 0.9 }}
+   446→            animate={{ opacity: 1, scale: 1 }}
+   447→            transition={{ duration: 0.6, delay: 0.2 }}
+   448→            className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4"
+   449→          >
+   450→            About Luxe
+   451→          </motion.h1>
+   452→          <motion.p
+   453→            initial={{ opacity: 0, y: 10 }}
+   454→            animate={{ opacity: 1, y: 0 }}
+   455→            transition={{ duration: 0.6, delay: 0.4 }}
+   456→            className="text-lg sm:text-xl text-white/80 max-w-2xl mx-auto"
+   457→          >
+   458→            Curating the world&apos;s finest products for discerning customers who appreciate quality, style, and innovation.
+   459→          </motion.p>
+   460→        </div>
+   461→      </motion.div>
+   462→
+   463→      {/* Mission Section */}
+   464→      <motion.div
+   465→        initial={{ opacity: 0, y: 30 }}
+   466→        animate={{ opacity: 1, y: 0 }}
+   467→        transition={{ duration: 0.6, delay: 0.1 }}
+   468→        className="mb-12"
+   469→      >
+   470→        <Card className="rounded-2xl border-border/50 shadow-sm">
+   471→          <CardContent className="p-6 sm:p-8">
+   472→            <div className="flex items-start gap-4">
+   473→              <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center flex-shrink-0">
+   474→                <Globe className="h-6 w-6 text-white" />
+   475→              </div>
+   476→              <div>
+   477→                <h2 className="text-2xl font-bold mb-3">Our Mission</h2>
+   478→                <p className="text-muted-foreground leading-relaxed">
+   479→                  At Luxe, we believe everyone deserves access to premium products that enhance their daily lives.
+   480→                  Our mission is to bridge the gap between exceptional craftsmanship and the modern consumer,
+   481→                  making luxury accessible without compromise. We partner with the world&apos;s finest brands and
+   482→                  artisans to bring you a curated collection that reflects quality, innovation, and timeless elegance.
+   483→                </p>
+   484→              </div>
+   485→            </div>
+   486→          </CardContent>
+   487→        </Card>
+   488→      </motion.div>
+   489→
+   490→      {/* Values Section */}
+   491→      <motion.div
+   492→        variants={staggerContainer}
+   493→        initial="initial"
+   494→        animate="animate"
+   495→        className="mb-12"
+   496→      >
+   497→        <motion.h2
+   498→          variants={staggerItem}
+   499→          className="text-2xl font-bold mb-6 text-center"
+   500→        >
+   501→          Our Values
+   502→        </motion.h2>
+   503→        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6">
+   504→          {values.map((value) => (
+   505→            <motion.div key={value.title} variants={staggerItem}>
+   506→              <Card className="rounded-2xl border-border/50 shadow-sm h-full hover:shadow-md transition-shadow">
+   507→                <CardContent className="p-6 text-center">
+   508→                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-violet-100 to-fuchsia-100 dark:from-violet-950 dark:to-fuchsia-950 flex items-center justify-center mx-auto mb-4">
+   509→                    <value.icon className="h-7 w-7 text-violet-600 dark:text-violet-400" />
+   510→                  </div>
+   511→                  <h3 className="text-lg font-semibold mb-2">{value.title}</h3>
+   512→                  <p className="text-sm text-muted-foreground leading-relaxed">
+   513→                    {value.description}
+   514→                  </p>
+   515→                </CardContent>
+   516→              </Card>
+   517→            </motion.div>
+   518→          ))}
+   519→        </div>
+   520→      </motion.div>
+   521→
+   522→      {/* Team Section */}
+   523→      <motion.div
+   524→        initial={{ opacity: 0, y: 30 }}
+   525→        animate={{ opacity: 1, y: 0 }}
+   526→        transition={{ duration: 0.6, delay: 0.2 }}
+   527→        className="mb-12"
+   528→      >
+   529→        <h2 className="text-2xl font-bold mb-6 text-center">Meet Our Team</h2>
+   530→        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6">
+   531→          {team.map((member, index) => (
+   532→            <motion.div
+   533→              key={member.name}
+   534→              initial={{ opacity: 0, y: 20 }}
+   535→              animate={{ opacity: 1, y: 0 }}
+   536→              transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
+   537→            >
+   538→              <Card className="rounded-2xl border-border/50 shadow-sm hover:shadow-md transition-shadow">
+   539→                <CardContent className="p-6 text-center">
+   540→                  <div
+   541→                    className={`h-20 w-20 rounded-full bg-gradient-to-br ${member.color} mx-auto mb-4 flex items-center justify-center`}
+   542→                  >
+   543→                    <span className="text-2xl font-bold text-white">
+   544→                      {member.name
+   545→                        .split(' ')
+   546→                        .map((n) => n[0])
+   547→                        .join('')}
+   548→                    </span>
+   549→                  </div>
+   550→                  <h3 className="text-lg font-semibold">{member.name}</h3>
+   551→                  <p className="text-sm text-muted-foreground">{member.role}</p>
+   552→                </CardContent>
+   553→              </Card>
+   554→            </motion.div>
+   555→          ))}
+   556→        </div>
+   557→      </motion.div>
+   558→
+   559→      {/* Stats Section */}
+   560→      <motion.div
+   561→        initial={{ opacity: 0, y: 30 }}
+   562→        animate={{ opacity: 1, y: 0 }}
+   563→        transition={{ duration: 0.6, delay: 0.3 }}
+   564→      >
+   565→        <Card className="rounded-2xl border-border/50 shadow-sm bg-gradient-to-br from-muted/50 to-muted">
+   566→          <CardContent className="p-6 sm:p-8">
+   567→            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+   568→              {stats.map((stat) => (
+   569→                <div key={stat.label} className="text-center">
+   570→                  <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center mx-auto mb-3">
+   571→                    <stat.icon className="h-6 w-6 text-white" />
+   572→                  </div>
+   573→                  <p className="text-2xl sm:text-3xl font-bold">{stat.value}</p>
+   574→                  <p className="text-sm text-muted-foreground mt-1">{stat.label}</p>
+   575→                </div>
+   576→              ))}
+   577→            </div>
+   578→          </CardContent>
+   579→        </Card>
+   580→      </motion.div>
+   581→    </div>
+   582→  );
+   583→}
+   584→
+   585→// ─── ContactPage ─────────────────────────────────────────────────────────────
+   586→
+   587→export function ContactPage() {
+   588→  const [formData, setFormData] = useState({
+   589→    name: '',
+   590→    email: '',
+   591→    subject: '',
+   592→    message: '',
+   593→  });
+   594→
+   595→  const handleChange = (field: string, value: string) => {
+   596→    setFormData((prev) => ({ ...prev, [field]: value }));
+   597→  };
+   598→
+   599→  const handleSubmit = (e: React.FormEvent) => {
+   600→    e.preventDefault();
+   601→    if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+   602→      toast.error('Please fill in all fields');
+   603→      return;
+   604→    }
+   605→    toast.success('Message sent!', {
+   606→      description: "We'll get back to you as soon as possible.",
+   607→    });
+   608→    setFormData({ name: '', email: '', subject: '', message: '' });
+   609→  };
+   610→
+   611→  const contactInfo = [
+   612→    {
+   613→      icon: MapPin,
+   614→      title: 'Address',
+   615→      detail: '123 Commerce Street, Suite 456\nNew York, NY 10001',
+   616→    },
+   617→    {
+   618→      icon: Phone,
+   619→      title: 'Phone',
+   620→      detail: '+1 (555) 123-4567',
+   621→    },
+   622→    {
+   623→      icon: Mail,
+   624→      title: 'Email',
+   625→      detail: 'hello@luxestore.com',
+   626→    },
+   627→    {
+   628→      icon: Clock,
+   629→      title: 'Business Hours',
+   630→      detail: 'Mon - Fri: 9:00 AM - 6:00 PM\nSat - Sun: 10:00 AM - 4:00 PM',
+   631→    },
+   632→  ];
+   633→
+   634→  return (
+   635→    <div className="min-h-screen pb-12">
+   636→      {/* Header */}
+   637→      <motion.div
+   638→        initial={{ opacity: 0, y: 20 }}
+   639→        animate={{ opacity: 1, y: 0 }}
+   640→        transition={{ duration: 0.5 }}
+   641→        className="mb-8"
+   642→      >
+   643→        <h1 className="text-3xl font-bold tracking-tight">Get in Touch</h1>
+   644→        <p className="text-muted-foreground mt-2">
+   645→          Have a question or feedback? We&apos;d love to hear from you.
+   646→        </p>
+   647→      </motion.div>
+   648→
+   649→      {/* Two-Column Layout */}
+   650→      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-8">
+   651→        {/* Contact Form */}
+   652→        <motion.div
+   653→          initial={{ opacity: 0, x: -20 }}
+   654→          animate={{ opacity: 1, x: 0 }}
+   655→          transition={{ duration: 0.5, delay: 0.1 }}
+   656→        >
+   657→          <Card className="rounded-2xl border-border/50 shadow-sm h-full">
+   658→            <CardHeader>
+   659→              <CardTitle className="text-lg">Send us a message</CardTitle>
+   660→            </CardHeader>
+   661→            <CardContent>
+   662→              <form onSubmit={handleSubmit} className="space-y-4">
+   663→                <div>
+   664→                  <label className="text-sm font-medium mb-1.5 block">Name</label>
+   665→                  <Input
+   666→                    placeholder="Your name"
+   667→                    value={formData.name}
+   668→                    onChange={(e) => handleChange('name', e.target.value)}
+   669→                    className="rounded-xl"
+   670→                  />
+   671→                </div>
+   672→                <div>
+   673→                  <label className="text-sm font-medium mb-1.5 block">Email</label>
+   674→                  <Input
+   675→                    type="email"
+   676→                    placeholder="you@example.com"
+   677→                    value={formData.email}
+   678→                    onChange={(e) => handleChange('email', e.target.value)}
+   679→                    className="rounded-xl"
+   680→                  />
+   681→                </div>
+   682→                <div>
+   683→                  <label className="text-sm font-medium mb-1.5 block">Subject</label>
+   684→                  <Input
+   685→                    placeholder="What is this about?"
+   686→                    value={formData.subject}
+   687→                    onChange={(e) => handleChange('subject', e.target.value)}
+   688→                    className="rounded-xl"
+   689→                  />
+   690→                </div>
+   691→                <div>
+   692→                  <label className="text-sm font-medium mb-1.5 block">Message</label>
+   693→                  <textarea
+   694→                    placeholder="Tell us more..."
+   695→                    value={formData.message}
+   696→                    onChange={(e) => handleChange('message', e.target.value)}
+   697→                    rows={5}
+   698→                    className="border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 flex field-sizing-content min-h-16 w-full rounded-xl border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] md:text-sm resize-none"
+   699→                  />
+   700→                </div>
+   701→                <Button
+   702→                  type="submit"
+   703→                  className="w-full rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600 shadow-lg"
+   704→                >
+   705→                  <MessageSquare className="h-4 w-4 mr-2" />
+   706→                  Send Message
+   707→                </Button>
+   708→              </form>
+   709→            </CardContent>
+   710→          </Card>
+   711→        </motion.div>
+   712→
+   713→        {/* Contact Info */}
+   714→        <motion.div
+   715→          initial={{ opacity: 0, x: 20 }}
+   716→          animate={{ opacity: 1, x: 0 }}
+   717→          transition={{ duration: 0.5, delay: 0.2 }}
+   718→          className="space-y-4"
+   719→        >
+   720→          {contactInfo.map((info, index) => (
+   721→            <motion.div
+   722→              key={info.title}
+   723→              initial={{ opacity: 0, y: 15 }}
+   724→              animate={{ opacity: 1, y: 0 }}
+   725→              transition={{ duration: 0.4, delay: 0.3 + index * 0.08 }}
+   726→            >
+   727→              <Card className="rounded-2xl border-border/50 shadow-sm hover:shadow-md transition-shadow">
+   728→                <CardContent className="p-5">
+   729→                  <div className="flex items-start gap-4">
+   730→                    <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-violet-100 to-fuchsia-100 dark:from-violet-950 dark:to-fuchsia-950 flex items-center justify-center flex-shrink-0">
+   731→                      <info.icon className="h-5 w-5 text-violet-600 dark:text-violet-400" />
+   732→                    </div>
+   733→                    <div>
+   734→                      <h3 className="font-semibold text-sm mb-1">{info.title}</h3>
+   735→                      <p className="text-sm text-muted-foreground whitespace-pre-line">
+   736→                        {info.detail}
+   737→                      </p>
+   738→                    </div>
+   739→                  </div>
+   740→                </CardContent>
+   741→              </Card>
+   742→            </motion.div>
+   743→          ))}
+   744→        </motion.div>
+   745→      </div>
+   746→
+   747→      {/* Map Placeholder */}
+   748→      <motion.div
+   749→        initial={{ opacity: 0, y: 20 }}
+   750→        animate={{ opacity: 1, y: 0 }}
+   751→        transition={{ duration: 0.5, delay: 0.4 }}
+   752→      >
+   753→        <div className="h-64 rounded-2xl bg-muted flex flex-col items-center justify-center border border-border/50">
+   754→          <MapPin className="h-10 w-10 text-muted-foreground mb-3" />
+   755→          <p className="text-sm text-muted-foreground font-medium">Map View</p>
+   756→          <p className="text-xs text-muted-foreground/60 mt-1">123 Commerce Street, New York</p>
+   757→        </div>
+   758→      </motion.div>
+   759→    </div>
+   760→  );
+   761→}
+   762→
+   763→// ─── FAQPage ─────────────────────────────────────────────────────────────────
+   764→
+   765→export function FAQPage() {
+   766→  const navigate = useRouterStore((s) => s.navigate);
+   767→
+   768→  const faqItems = [
+   769→    {
+   770→      question: 'How long does shipping take?',
+   771→      answer:
+   772→        'Standard shipping typically takes 3-5 business days within the continental US. Expedited shipping (2-day) and overnight options are also available at checkout. International orders may take 7-14 business days depending on the destination and customs processing.',
+   773→    },
+   774→    {
+   775→      question: 'What is your return policy?',
+   776→      answer:
+   777→        'We offer a 30-day return policy on all unused items in their original packaging. Simply initiate a return through your account dashboard, and we\'ll provide a prepaid shipping label. Refunds are processed within 5-7 business days after we receive the returned item.',
+   778→    },
+   779→    {
+   780→      question: 'What payment methods do you accept?',
+   781→      answer:
+   782→        'We accept all major credit cards (Visa, MasterCard, American Express, Discover), debit cards, PayPal, Apple Pay, Google Pay, and Shop Pay. We also offer installment payment options through Klarna and Afterpay for qualifying orders.',
+   783→    },
+   784→    {
+   785→      question: 'How do I create an account?',
+   786→      answer:
+   787→        'Creating an account is easy! Click the "Register" button in the top navigation, fill in your name, email, and create a password. You\'ll receive a confirmation email to verify your account. Once verified, you can start shopping, save your preferences, and track your orders.',
+   788→    },
+   789→    {
+   790→      question: 'How can I track my order?',
+   791→      answer:
+   792→        'Once your order ships, you\'ll receive an email with a tracking number and a link to the carrier\'s website. You can also track your order by logging into your account and visiting the "Orders" section, where you\'ll find real-time status updates for all your purchases.',
+   793→    },
+   794→    {
+   795→      question: 'Do you offer international shipping?',
+   796→      answer:
+   797→        'Yes! We ship to over 50 countries worldwide. International shipping rates and delivery times vary by destination. You can check the available shipping options and costs during checkout by entering your delivery address. Please note that customs duties and taxes may apply.',
+   798→    },
+   799→    {
+   800→      question: 'Can I cancel or modify my order?',
+   801→      answer:
+   802→        'You can cancel or modify your order within 1 hour of placing it, provided it hasn\'t entered the processing stage. To make changes, go to your "Orders" page and click "Modify Order." If the option isn\'t available, please contact our support team immediately and we\'ll do our best to help.',
+   803→    },
+   804→    {
+   805→      question: 'How do I contact customer support?',
+   806→      answer:
+   807→        'Our customer support team is available 24/7 to assist you. You can reach us via email at hello@luxestore.com, by phone at +1 (555) 123-4567, or through the contact form on our Contact page. For urgent matters, our live chat is available during business hours.',
+   808→    },
+   809→    {
+   810→      question: 'Are your products authentic?',
+   811→      answer:
+   812→        'Absolutely. We source all our products directly from authorized distributors and brand partners. Every item comes with an authenticity guarantee. If you ever have concerns about a product\'s authenticity, please contact us immediately and we\'ll investigate.',
+   813→    },
+   814→    {
+   815→      question: 'Do you offer gift wrapping?',
+   816→      answer:
+   817→        'Yes! During checkout, you can select the gift wrapping option for $4.99 per item. We offer elegant wrapping with a personalized message card. Gift receipts are also available so the recipient can exchange the item without seeing the price.',
+   818→    },
+   819→  ];
+   820→
+   821→  return (
+   822→    <div className="min-h-screen pb-12">
+   823→      {/* Header */}
+   824→      <motion.div
+   825→        initial={{ opacity: 0, y: 20 }}
+   826→        animate={{ opacity: 1, y: 0 }}
+   827→        transition={{ duration: 0.5 }}
+   828→        className="mb-8"
+   829→      >
+   830→        <div className="flex items-center gap-3 mb-2">
+   831→          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-violet-100 to-fuchsia-100 dark:from-violet-950 dark:to-fuchsia-950 flex items-center justify-center">
+   832→            <HelpCircle className="h-5 w-5 text-violet-600 dark:text-violet-400" />
+   833→          </div>
+   834→          <h1 className="text-3xl font-bold tracking-tight">Frequently Asked Questions</h1>
+   835→        </div>
+   836→        <p className="text-muted-foreground mt-2">
+   837→          Find answers to the most common questions about our products and services.
+   838→        </p>
+   839→      </motion.div>
+   840→
+   841→      {/* FAQ Accordion */}
+   842→      <motion.div
+   843→        initial={{ opacity: 0, y: 20 }}
+   844→        animate={{ opacity: 1, y: 0 }}
+   845→        transition={{ duration: 0.5, delay: 0.1 }}
+   846→        className="mb-12"
+   847→      >
+   848→        <Card className="rounded-2xl border-border/50 shadow-sm">
+   849→          <CardContent className="p-4 sm:p-6">
+   850→            <Accordion type="single" collapsible className="w-full">
+   851→              {faqItems.map((item, index) => (
+   852→                <AccordionItem key={index} value={`item-${index}`}>
+   853→                  <AccordionTrigger className="text-left text-sm sm:text-base font-medium hover:no-underline hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
+   854→                    {item.question}
+   855→                  </AccordionTrigger>
+   856→                  <AccordionContent className="text-muted-foreground leading-relaxed text-sm sm:text-base">
+   857→                    {item.answer}
+   858→                  </AccordionContent>
+   859→                </AccordionItem>
+   860→              ))}
+   861→            </Accordion>
+   862→          </CardContent>
+   863→        </Card>
+   864→      </motion.div>
+   865→
+   866→      {/* Still Have Questions CTA */}
+   867→      <motion.div
+   868→        initial={{ opacity: 0, y: 20 }}
+   869→        animate={{ opacity: 1, y: 0 }}
+   870→        transition={{ duration: 0.5, delay: 0.2 }}
+   871→      >
+   872→        <Card className="rounded-2xl border-border/50 shadow-sm bg-gradient-to-br from-muted/50 to-muted">
+   873→          <CardContent className="p-8 sm:p-12 text-center">
+   874→            <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center mx-auto mb-4">
+   875→              <MessageSquare className="h-7 w-7 text-white" />
+   876→            </div>
+   877→            <h2 className="text-xl font-bold mb-2">Still have questions?</h2>
+   878→            <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+   879→              Can&apos;t find what you&apos;re looking for? Our team is here to help with any questions you may have.
+   880→            </p>
+   881→            <Button
+   882→              onClick={() => navigate('contact')}
+   883→              className="rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600 shadow-lg px-8"
+   884→            >
+   885→              <Mail className="h-4 w-4 mr-2" />
+   886→              Contact Us
+   887→            </Button>
+   888→          </CardContent>
+   889→        </Card>
+   890→      </motion.div>
+   891→    </div>
+   892→  );
+   893→}
+   894→
+   895→// ─── NotFoundPage ────────────────────────────────────────────────────────────
+   896→
+   897→export function NotFoundPage() {
+   898→  const navigate = useRouterStore((s) => s.navigate);
+   899→
+   900→  return (
+   901→    <div className="min-h-screen flex items-center justify-center">
+   902→      <motion.div
+   903→        initial={{ opacity: 0, scale: 0.9 }}
+   904→        animate={{ opacity: 1, scale: 1 }}
+   905→        transition={{ duration: 0.6, ease: 'easeOut' }}
+   906→        className="text-center px-4 py-16"
+   907→      >
+   908→        {/* Large 404 Text */}
+   909→        <motion.div
+   910→          initial={{ opacity: 0, y: -20 }}
+   911→          animate={{ opacity: 1, y: 0 }}
+   912→          transition={{ duration: 0.7, delay: 0.1 }}
+   913→        >
+   914→          <h1
+   915→            className="text-8xl sm:text-9xl lg:text-[12rem] font-extrabold bg-gradient-to-br from-violet-500 via-fuchsia-500 to-pink-500 bg-clip-text text-transparent leading-none"
+   916→          >
+   917→            404
+   918→          </h1>
+   919→        </motion.div>
+   920→
+   921→        {/* Subtitle */}
+   922→        <motion.div
+   923→          initial={{ opacity: 0, y: 10 }}
+   924→          animate={{ opacity: 1, y: 0 }}
+   925→          transition={{ duration: 0.5, delay: 0.3 }}
+   926→        >
+   927→          <h2 className="text-2xl sm:text-3xl font-bold mt-6 mb-3">Page Not Found</h2>
+   928→          <p className="text-muted-foreground max-w-md mx-auto mb-8">
+   929→            The page you&apos;re looking for doesn&apos;t exist or has been moved.
+   930→            Let&apos;s get you back on track.
+   931→          </p>
+   932→        </motion.div>
+   933→
+   934→        {/* Buttons */}
+   935→        <motion.div
+   936→          initial={{ opacity: 0, y: 10 }}
+   937→          animate={{ opacity: 1, y: 0 }}
+   938→          transition={{ duration: 0.5, delay: 0.5 }}
+   939→          className="flex flex-col sm:flex-row items-center justify-center gap-3"
+   940→        >
+   941→          <Button
+   942→            onClick={() => navigate('home')}
+   943→            className="rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:from-violet-600 hover:to-fuchsia-600 shadow-lg px-8 h-12"
+   944→          >
+   945→            <Home className="h-4 w-4 mr-2" />
+   946→            Go Home
+   947→          </Button>
+   948→          <Button
+   949→            variant="outline"
+   950→            onClick={() => navigate('shop')}
+   951→            className="rounded-xl px-8 h-12 border-border/50"
+   952→          >
+   953→            Browse Shop
+   954→          </Button>
+   955→        </motion.div>
+   956→      </motion.div>
+   957→    </div>
+   958→  );
+   959→}
+   960→

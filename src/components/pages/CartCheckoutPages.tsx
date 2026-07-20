@@ -242,11 +242,11 @@ export function CartPage() {
                   transition={{ duration: 0.3 }}
                 >
                   <Card className="border-border/50 hover:border-border transition-colors">
-                    <CardContent className="p-4 md:p-6">
-                      <div className="flex gap-4">
+                    <CardContent className="p-3 sm:p-4 md:p-6">
+                      <div className="flex gap-3 sm:gap-4">
                         {/* Product Image */}
                         <div
-                          className="h-24 w-24 md:h-28 md:w-28 rounded-xl overflow-hidden shrink-0 cursor-pointer bg-muted"
+                          className="h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28 rounded-xl overflow-hidden shrink-0 cursor-pointer bg-muted"
                           onClick={() => navigate('product', { id: product.id })}
                         >
                           <ProductImage

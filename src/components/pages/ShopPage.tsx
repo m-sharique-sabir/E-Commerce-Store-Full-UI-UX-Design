@@ -546,7 +546,7 @@ export function ShopPage() {
           <div className="flex items-center gap-3">
             {/* Sort Dropdown */}
             <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
-              <SelectTrigger className="w-[180px] rounded-xl">
+              <SelectTrigger className="w-[140px] sm:w-[180px] rounded-xl">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
               <SelectContent>
